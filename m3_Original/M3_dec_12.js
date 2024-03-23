@@ -545,19 +545,86 @@
               '@val2': formatNumber(val_t5_row_r411c1, 2)
             })
           });
-        }*/
-        var result03031 = toFloat(toFloat(values.CAPV_R6_C1) + toFloat(values.CAPV_R7_C1) + toFloat(values.CAPV_R8_C1) + toFloat(values.CAPV_R9_C1) + toFloat(values.CAPV_R10_C1)).toFixed(1);
-        if (toFloat(values.CAPV_R5_C1) < result03031) {
-            webform.errors.push({
-                'fieldName': 'CAPV_R5_C1',
-                'index': 0,
-                'weight': 31,
-                'options': {
-                    'hide_title': true
-                },
-                'msg': Drupal.t('Cod eroare: 03-031 - Cap V, Rând 5 >= Rând 6+ Rând 7+Rând 8+Rând 9 + Rând 10')
-            });
+         }*/
+
+        //------------------------------------------------------------------------
+        // Is is code Js in Drupal. 
+        //Float type variables are introduced.
+        //Enter the following variables with the following numbers
+        //values.CAPV_R5_C1 = 79
+        //values.CAPV_R6_C1 = 4
+        //values.CAPV_R7_C1 = 
+        // var result03031 = 0;
+        // result03031 = toFloat(toFloat(values.CAPV_R6_C1) + toFloat(values.CAPV_R7_C1) + toFloat(values.CAPV_R8_C1) 
+        // + toFloat(values.CAPV_R9_C1) + toFloat(values.CAPV_R10_C1)).toFixed(1);
+
+        // v_CAPV_R5_C1 = 0;
+        // v_CAPV_R5_C1 = toFloat(values.CAPV_R5_C1).toFixed(1);
+
+        // //But here the variables are of type
+        // //v_CAPV_R5_C1 = '79' 
+        // //result03031  = '8'
+        // // Here it is checked as string but it must be number
+        // //'79' < '8'
+        // //Change the code. To be verified as numbers.
+        // //Convert to a number with a comma after zero
+        // if (v_CAPV_R5_C1 < result03031) {
+        //     webform.errors.push({
+        //         'fieldName': 'CAPV_R5_C1',
+        //         'index': 0,
+        //         'weight': 31,
+        //         'options': {
+        //             'hide_title': true
+        //         },
+        //         'msg': Drupal.t('Cod eroare: 03-031 - Cap V, Rând 5 >= Rând 6+ Rând 7+Rând 8+Rând 9 + Rând 10')
+        //     });
+        // }
+//------------------------------------------------------------------------------
+
+         
+        // Float type variables are introduced.
+        // Enter the following variables with the following numbers
+        // values.CAPV_R5_C1 = 79
+        // values.CAPV_R6_C1 = 4
+        // values.CAPV_R7_C1 = 
+
+        var result03031 = 0;
+        result03031 = parseFloat(values.CAPV_R6_C1) || 0;
+        result03031 += parseFloat(values.CAPV_R7_C1) || 0;
+        result03031 += parseFloat(values.CAPV_R8_C1) || 0;
+        result03031 += parseFloat(values.CAPV_R9_C1) || 0;
+        result03031 += parseFloat(values.CAPV_R10_C1) || 0;
+        result03031 = parseFloat(result03031.toFixed(1)); // Convertim înapoi într-un număr
+
+        var v_CAPV_R5_C1 = parseFloat(values.CAPV_R5_C1) || 0;
+        v_CAPV_R5_C1 = parseFloat(v_CAPV_R5_C1.toFixed(1)); // Convertim înapoi într-un număr
+
+        // Verificăm dacă valorile sunt NaN
+        if (isNaN(result03031) || isNaN(v_CAPV_R5_C1)) {
+            console.error("One or more values couldn't be parsed as numbers:", values.CAPV_R5_C1, values.CAPV_R6_C1, values.CAPV_R7_C1, values.CAPV_R8_C1, values.CAPV_R9_C1, values.CAPV_R10_C1);
+        } else {
+            // Verificăm dacă v_CAPV_R5_C1 este mai mic decât result03031 ca numere
+            if (v_CAPV_R5_C1 < result03031) {
+                webform.errors.push({
+                    'fieldName': 'CAPV_R5_C1',
+                    'index': 0,
+                    'weight': 31,
+                    'options': {
+                        'hide_title': true
+                    },
+                    'msg': Drupal.t('Cod eroare: 03-031 - Cap V, Rând 5 >= Rând 6+ Rând 7+Rând 8+Rând 9 + Rând 10 - &v_CAPV_R5_C1 < &result03031', { '&v_CAPV_R5_C1': v_CAPV_R5_C1,
+                        '&result03031': result03031} )
+                });
+            }
         }
+
+        
+
+//-----------------------------------------------------------------------------------------
+
+
+
+
         if (values.CAPV_R11_C1) {
             webform.warnings.push({
                 'fieldName': 'CAPV_R11_C1',
@@ -2103,16 +2170,42 @@
         }
     }
 
+//     Ok.I have same error in this function. 
+// Fix  this. 
+    // function validate_rule_03114(param, index) {
+    //     var f1 = param.fieldTemplate.replace('_COL_', 2);
+    //     var f1_val = get_field_value(f1, index);
+
+    //     for (var i = 7; i <= 8; i++) {
+    //         var msg = Drupal.t('Cap.II., Rândul 00-T, col. 1 > Cap.II., Rândul 00-T, col. @col', { '@col': i - 1 });
+    //         var f2 = param.fieldTemplate.replace('_COL_', i);
+    //         var f2_val = get_field_value(f2, index);
+
+    //         if (f2_val !== '' && toFloat(f1_val) <= toFloat(f2_val)) {
+    //             webform.errors.push({
+    //                 'fieldName': f1,
+    //                 'index': 0,
+    //                 'weight': 114,
+    //                 'options': {
+    //                     'hide_title': true
+    //                 },
+    //                 'msg': generateMessageTitle('03-114', msg, f1, index),
+    //             });
+    //         }
+    //     }
+    // }
+
     function validate_rule_03114(param, index) {
         var f1 = param.fieldTemplate.replace('_COL_', 2);
-        var f1_val = get_field_value(f1, index);
+        var f1_val = parseFloat(get_field_value(f1, index)); // Convertim valoarea în număr
 
         for (var i = 7; i <= 8; i++) {
             var msg = Drupal.t('Cap.II., Rândul 00-T, col. 1 > Cap.II., Rândul 00-T, col. @col', { '@col': i - 1 });
             var f2 = param.fieldTemplate.replace('_COL_', i);
-            var f2_val = get_field_value(f2, index);
+            var f2_val = parseFloat(get_field_value(f2, index)); // Convertim valoarea în număr
 
-            if (f2_val !== '' && toFloat(f1_val) <= toFloat(f2_val)) {
+            // Verificăm dacă f2_val nu este gol și dacă f1_val este mai mic sau egal cu f2_val
+            if (f2_val !== '' && !isNaN(f1_val) && !isNaN(f2_val) && f1_val <= f2_val) {
                 webform.errors.push({
                     'fieldName': f1,
                     'index': 0,
@@ -2125,6 +2218,8 @@
             }
         }
     }
+
+
 
     function validate_rule_03028() {
         var t5 = get_field_value('CAPV_R2_C1');
