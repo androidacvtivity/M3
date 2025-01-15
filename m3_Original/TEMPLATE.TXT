@@ -1,0 +1,19 @@
+Completed column name.
+Add the name from the 'xpath' column to the 'name' column, but replace the '/' character with '_'. 
+The first row is already completed: in 'xpath' it is 'dec/DataSet/Header/ENT_NAME', and in 'name' it is 'ENT_NAME'
+
+Tradu in engleza 
+--------------------
+
+Modifica variabilile din coloana A si B.
+
+Exemplu 
+CAPIa_R00-T_C2	dec/DataSet/Data/CAPIa_R00-T_C2
+
+in 
+
+CAPIa_R00_T_C2	dec/DataSet/Data/CAPIa_R00_T_C2
+
+
+Daca o sa gasesti in denumurea variabilei "-" modifica in "_" .
+
