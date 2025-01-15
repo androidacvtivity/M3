@@ -17,3 +17,8 @@ CAPIa_R00_T_C2	dec/DataSet/Data/CAPIa_R00_T_C2
 
 Daca o sa gasesti in denumurea variabilei "-" modifica in "_" .
 
+
+
+M3_dec_36.js
+
+january1525
