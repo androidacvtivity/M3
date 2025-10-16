@@ -28,3 +28,13 @@ january1525
 1. Fisierul js l-am luat de pe productie. 
 2. Am restabilit fisierul xls. 
 
+
+
+I check if the report on production has the same id as the one on test.
+
+https://declaratie-electronica.fisc.md/ro/declaration/add/m3
+
+https://edecbns-test.sfs.md/ro/declaration/add/m3
+
+Is the same ID
+
