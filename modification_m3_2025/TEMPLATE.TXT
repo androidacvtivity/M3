@@ -23,3 +23,8 @@ M3_dec_36.js
 
 
 january1525
+
+
+1. Fisierul js l-am luat de pe productie. 
+2. Am restabilit fisierul xls. 
+
