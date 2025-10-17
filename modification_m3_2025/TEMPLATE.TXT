@@ -38,3 +38,4 @@ https://edecbns-test.sfs.md/ro/declaration/add/m3
 
 Is the same ID
 
+I delete and then upload all the files again - I check again - to make sure it's good.
