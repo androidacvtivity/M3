@@ -1,0 +1,9 @@
+SELECT code, CONCAT(code, ' - ', name) FROM taxonomy_term_data t JOIN classifier_cuatm_full c ON c.tid = t.tid  WHERE c.prgs in ('2','4','6','8','9') ORDER BY code;
+
+
+SQL MySQL 
+Modifica in CONCAT - daca codul se incepe cu '1' sa fie 0 in fata  
+
+SELECT code, CONCAT(code, ' - ', name) FROM taxonomy_term_data t JOIN classifier_cuatm_full c ON c.tid = t.tid  WHERE c.prgs in ('4')  ORDER BY c.code;
+
+SELECT code, CONCAT(code, ' ', name) FROM taxonomy_term_data t JOIN classifier_cuatm_full c ON c.tid = t.tid  WHERE c.prgs in ('4','6','8','9');
