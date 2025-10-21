@@ -1,0 +1,197 @@
+<dec TypeName="m3">
+  <DataSet>
+    <Header>
+      <ENT_NAME>SECTIA CULTURA SI TURISM A CONSILIULUI RAIONAL TARACLIA</ENT_NAME>
+      <CUATM>8701</CUATM>
+      <CAEM>O8412</CAEM>
+      <STREET>OR.TARACLIA General Inzov nr.1</STREET>
+      <STREET_NR />
+      <CUIIO>41777255</CUIIO>
+      <IDNO>1024601000149</IDNO>
+      <HEAD>CALCIU MARIA A.</HEAD>
+      <EXECUTOR>NONNA PANICERSCAIA</EXECUTOR>
+      <PHONE />
+      <nalogPeriodLetter>A</nalogPeriodLetter>
+      <nalogPeriodType>A/2024</nalogPeriodType>
+      <YEAR>2024</YEAR>
+    </Header>
+    <Data>
+      <CAPIa_R00-T_C2>70</CAPIa_R00-T_C2>
+      <CAPIa_R00-T_C3>56.2</CAPIa_R00-T_C3>
+      <CAPIa_R00-T_C4>53.6</CAPIa_R00-T_C4>
+      <CAPIa_R00-T_C5>9.4</CAPIa_R00-T_C5>
+      <CAPIa_R00-T_C6>2.6</CAPIa_R00-T_C6>
+      <CAPIa_R00-T_C7 />
+      <CAPIa_R00-T_C8 />
+      <CAPIa_R00-T_C9 />
+      <CAPIa_R00-T_C10 />
+      <CAPIa_R00-T_C11 />
+      <CAPIa_R00-F_C2>37</CAPIa_R00-F_C2>
+      <CAPIa_R00-F_C3>32.9</CAPIa_R00-F_C3>
+      <CAPIa_R00-F_C7 />
+      <CAPIa_R00-F_C8 />
+      <CAPIa_R01-T_C1>O8412</CAPIa_R01-T_C1>
+      <CAPIa_R01-T_C2>6</CAPIa_R01-T_C2>
+      <CAPIa_R01-T_C3>6.0</CAPIa_R01-T_C3>
+      <CAPIa_R01-T_C4>6.0</CAPIa_R01-T_C4>
+      <CAPIa_R01-T_C5 />
+      <CAPIa_R01-T_C6 />
+      <CAPIa_R01-T_C7 />
+      <CAPIa_R01-T_C8 />
+      <CAPIa_R01-T_C9 />
+      <CAPIa_R01-T_C10 />
+      <CAPIa_R01-T_C11 />
+      <CAPIa_R01-F_C2>5</CAPIa_R01-F_C2>
+      <CAPIa_R01-F_C3>5.5</CAPIa_R01-F_C3>
+      <CAPIa_R01-F_C7 />
+      <CAPIa_R01-F_C8 />
+      <CAPIa>
+        <CAPIa_R line="1">
+          <CAPIa_R_INDEX>2</CAPIa_R_INDEX>
+          <CAPIa_R-T_C1>R9101</CAPIa_R-T_C1>
+          <CAPIa_R-T_C2>12</CAPIa_R-T_C2>
+          <CAPIa_R-T_C3>12.0</CAPIa_R-T_C3>
+          <CAPIa_R-T_C4>9.4</CAPIa_R-T_C4>
+          <CAPIa_R-T_C5>9.4</CAPIa_R-T_C5>
+          <CAPIa_R-T_C6>2.6</CAPIa_R-T_C6>
+          <CAPIa_R-T_C7 />
+          <CAPIa_R-T_C8 />
+          <CAPIa_R-T_C9 />
+          <CAPIa_R-T_C10 />
+          <CAPIa_R-T_C11 />
+          <CAPIa_R-F_C2>12</CAPIa_R-F_C2>
+          <CAPIa_R-F_C3>10.7</CAPIa_R-F_C3>
+          <CAPIa_R-F_C7 />
+          <CAPIa_R-F_C8 />
+        </CAPIa_R>
+        <CAPIa_R line="2">
+          <CAPIa_R_INDEX>3</CAPIa_R_INDEX>
+          <CAPIa_R-T_C1>R9004</CAPIa_R-T_C1>
+          <CAPIa_R-T_C2>26</CAPIa_R-T_C2>
+          <CAPIa_R-T_C3>18.2</CAPIa_R-T_C3>
+          <CAPIa_R-T_C4>18.2</CAPIa_R-T_C4>
+          <CAPIa_R-T_C5 />
+          <CAPIa_R-T_C6 />
+          <CAPIa_R-T_C7 />
+          <CAPIa_R-T_C8 />
+          <CAPIa_R-T_C9 />
+          <CAPIa_R-T_C10 />
+          <CAPIa_R-T_C11 />
+          <CAPIa_R-F_C2>11</CAPIa_R-F_C2>
+          <CAPIa_R-F_C3>7.7</CAPIa_R-F_C3>
+          <CAPIa_R-F_C7 />
+          <CAPIa_R-F_C8 />
+        </CAPIa_R>
+        <CAPIa_R line="3">
+          <CAPIa_R_INDEX>4</CAPIa_R_INDEX>
+          <CAPIa_R-T_C1>P8552</CAPIa_R-T_C1>
+          <CAPIa_R-T_C2>26</CAPIa_R-T_C2>
+          <CAPIa_R-T_C3>20.0</CAPIa_R-T_C3>
+          <CAPIa_R-T_C4>20.0</CAPIa_R-T_C4>
+          <CAPIa_R-T_C5 />
+          <CAPIa_R-T_C6 />
+          <CAPIa_R-T_C7 />
+          <CAPIa_R-T_C8 />
+          <CAPIa_R-T_C9 />
+          <CAPIa_R-T_C10 />
+          <CAPIa_R-T_C11 />
+          <CAPIa_R-F_C2>9</CAPIa_R-F_C2>
+          <CAPIa_R-F_C3>9.0</CAPIa_R-F_C3>
+          <CAPIa_R-F_C7 />
+          <CAPIa_R-F_C8 />
+        </CAPIa_R>
+      </CAPIa>
+      <CAPII_R00-T_C2>4865.6</CAPII_R00-T_C2>
+      <CAPII_R00-T_C3>4138.6</CAPII_R00-T_C3>
+      <CAPII_R00-T_C4>139.3</CAPII_R00-T_C4>
+      <CAPII_R00-T_C5>727.0</CAPII_R00-T_C5>
+      <CAPII_R00-T_C6 />
+      <CAPII_R00-T_C7>437.9</CAPII_R00-T_C7>
+      <CAPII_R00-T_C8>318.8</CAPII_R00-T_C8>
+      <CAPII_R00-F_C2>2954.6</CAPII_R00-F_C2>
+      <CAPII_R00-F_C7>265.9</CAPII_R00-F_C7>
+      <CAPII_R00-F_C8>190.0</CAPII_R00-F_C8>
+      <CAPII_R01-T_C1>O8412</CAPII_R01-T_C1>
+      <CAPII_R01-T_C2>444.6</CAPII_R01-T_C2>
+      <CAPII_R01-T_C3>432.4</CAPII_R01-T_C3>
+      <CAPII_R01-T_C4>6.5</CAPII_R01-T_C4>
+      <CAPII_R01-T_C5>12.2</CAPII_R01-T_C5>
+      <CAPII_R01-T_C6 />
+      <CAPII_R01-T_C7>40.0</CAPII_R01-T_C7>
+      <CAPII_R01-T_C8>21.9</CAPII_R01-T_C8>
+      <CAPII_R01-F_C2>385.7</CAPII_R01-F_C2>
+      <CAPII_R01-F_C7>34.7</CAPII_R01-F_C7>
+      <CAPII_R01-F_C8>19.2</CAPII_R01-F_C8>
+      <CAPII>
+        <CAPII_R line="1">
+          <CAPII_R_INDEX>2</CAPII_R_INDEX>
+          <CAPII_R-T_C1>R9101</CAPII_R-T_C1>
+          <CAPII_R-T_C2>749.7</CAPII_R-T_C2>
+          <CAPII_R-T_C3>680.3</CAPII_R-T_C3>
+          <CAPII_R-T_C4>19.1</CAPII_R-T_C4>
+          <CAPII_R-T_C5>69.4</CAPII_R-T_C5>
+          <CAPII_R-T_C6 />
+          <CAPII_R-T_C7>67.5</CAPII_R-T_C7>
+          <CAPII_R-T_C8>43.0</CAPII_R-T_C8>
+          <CAPII_R-F_C2>749.7</CAPII_R-F_C2>
+          <CAPII_R-F_C7>67.5</CAPII_R-F_C7>
+          <CAPII_R-F_C8>43.0</CAPII_R-F_C8>
+        </CAPII_R>
+        <CAPII_R line="2">
+          <CAPII_R_INDEX>3</CAPII_R_INDEX>
+          <CAPII_R-T_C1>R9004</CAPII_R-T_C1>
+          <CAPII_R-T_C2>1363.5</CAPII_R-T_C2>
+          <CAPII_R-T_C3>1202.6</CAPII_R-T_C3>
+          <CAPII_R-T_C4 />
+          <CAPII_R-T_C5>160.9</CAPII_R-T_C5>
+          <CAPII_R-T_C6 />
+          <CAPII_R-T_C7>122.7</CAPII_R-T_C7>
+          <CAPII_R-T_C8>60.8</CAPII_R-T_C8>
+          <CAPII_R-F_C2>614.6</CAPII_R-F_C2>
+          <CAPII_R-F_C7>55.3</CAPII_R-F_C7>
+          <CAPII_R-F_C8>30.7</CAPII_R-F_C8>
+        </CAPII_R>
+        <CAPII_R line="3">
+          <CAPII_R_INDEX>4</CAPII_R_INDEX>
+          <CAPII_R-T_C1>P8552</CAPII_R-T_C1>
+          <CAPII_R-T_C2>2307.8</CAPII_R-T_C2>
+          <CAPII_R-T_C3>1823.3</CAPII_R-T_C3>
+          <CAPII_R-T_C4>113.7</CAPII_R-T_C4>
+          <CAPII_R-T_C5>484.5</CAPII_R-T_C5>
+          <CAPII_R-T_C6 />
+          <CAPII_R-T_C7>207.7</CAPII_R-T_C7>
+          <CAPII_R-T_C8>193.1</CAPII_R-T_C8>
+          <CAPII_R-F_C2>1204.6</CAPII_R-F_C2>
+          <CAPII_R-F_C7>108.4</CAPII_R-F_C7>
+          <CAPII_R-F_C8>97.1</CAPII_R-F_C8>
+        </CAPII_R>
+      </CAPII>
+      <CAPIII_R1_C1 />
+      <CAPIII_R1_C2 />
+      <CAPIII_R1_C3 />
+      <CAPIII_R2_C1 />
+      <CAPIII_R2_C2 />
+      <CAPIII_R2_C3 />
+      <CAPIII_R3_C1 />
+      <CAPIII_R3_C2 />
+      <CAPIII_R3_C3 />
+      <CAPIII_R4_C1 />
+      <CAPIII_R4_C2 />
+      <CAPIII_R4_C3 />
+      <CAPV_R1_C1>2848.6</CAPV_R1_C1>
+      <CAPV_R2_C1>1411.0</CAPV_R2_C1>
+      <CAPV_R3_C1>1435.6</CAPV_R3_C1>
+      <CAPV_R3.1_C1>24.6</CAPV_R3.1_C1>
+      <CAPV_R3.1.1_C1>24.6</CAPV_R3.1.1_C1>
+      <CAPV_R3.2_C1>1411.0</CAPV_R3.2_C1>
+      <CAPV_R4_C1 />
+      <CAPV_R5_C1>2.0</CAPV_R5_C1>
+      <CAPV_R6_C1>2.0</CAPV_R6_C1>
+      <CAPV_R7_C1 />
+      <CAPV_R8_C1 />
+      <CAPV_R9_C1 />
+      <CAPV_R10_C1 />
+      <CAPV_R11_C1 />
+    </Data>
+  </DataSet>
+</dec>
