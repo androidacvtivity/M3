@@ -1,0 +1,1 @@
+SELECT code, CONCAT(CASE WHEN TRIM(code) REGEXP '^[135]' AND CHAR_LENGTH(TRIM(code)) = 6 THEN CONCAT('0', TRIM(code)) ELSE TRIM(code) END, ' ', name) FROM taxonomy_term_data t JOIN classifier_cuatm_full c ON c.tid = t.tid  WHERE c.prgs in ('5','3','4','6','8','9');
