@@ -8,3 +8,4 @@ SELECT LEFT(CASE WHEN TRIM(c.code) REGEXP '^[135]' AND CHAR_LENGTH(TRIM(c.code))
 
 
 
+Last modification
