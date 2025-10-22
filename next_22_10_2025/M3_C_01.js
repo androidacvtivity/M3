@@ -1,7 +1,7 @@
 (function ($) {
 
     var static_form_version;
-
+//Current version of the js file on production
     var form_versions = {
         'v1': {
             'year': 2019,
@@ -248,6 +248,8 @@
         jQuery('#' + specs.resultF + '-' + (index + 1)).val(toFloat(result)).trigger('change');
     }
 
+
+    
     function fix_autocalc_fields($element) {
         var resultFieldName = $element.attr('field');
         var rowIndex = $element.attr('row-index');
@@ -412,11 +414,11 @@
     webform.validators.validate_m3 = function () {
         var values = Drupal.settings.mywebform.values;
 
-//----------------------------------------------------------------------------------------------------
-//03-092   
-// Ok.I have same error in this code
+        //----------------------------------------------------------------------------------------------------
+        //03-092   
+        // Ok.I have same error in this code
         // Fix  this. 
-//But without the comma after the zero here. Here integers not floats
+        //But without the comma after the zero here. Here integers not floats
         // var comparison_fields_table3 = [
         //     { 'f1': 'CAPIII_R1_C1', 'f2': 'CAPIII_R1_C2', 'row': 1 },
         //     { 'f1': 'CAPIII_R2_C1', 'f2': 'CAPIII_R2_C2', 'row': 2 },
@@ -510,8 +512,8 @@
 
 
 
-//-----------------------------------------------------------------------------
-        var cap1a_c1_00T  = 0;
+        //-----------------------------------------------------------------------------
+        var cap1a_c1_00T = 0;
         cap1a_c1_00T = toFloat(values.CAPIa_R00_T_C2);
         // var CAPIII_R1_C1  = 0;
         // CAPIII_R1_C1 = toFloat(values.CAPIII_R1_C1);
@@ -660,9 +662,9 @@
         //         'msg': Drupal.t('Cod eroare: 03-031 - Cap V, Rând 5 >= Rând 6+ Rând 7+Rând 8+Rând 9 + Rând 10')
         //     });
         // }
-//------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
 
-         
+
         // Float type variables are introduced.
         // Enter the following variables with the following numbers
         // values.CAPV_R5_C1 = 79
@@ -693,15 +695,17 @@
                     'options': {
                         'hide_title': true
                     },
-                    'msg': Drupal.t('Cod eroare: 03-031 - Cap V, Rând 5 >= Rând 6+ Rând 7+Rând 8+Rând 9 + Rând 10 - &v_CAPV_R5_C1 < &result03031', { '&v_CAPV_R5_C1': v_CAPV_R5_C1,
-                        '&result03031': result03031} )
+                    'msg': Drupal.t('Cod eroare: 03-031 - Cap V, Rând 5 >= Rând 6+ Rând 7+Rând 8+Rând 9 + Rând 10 - &v_CAPV_R5_C1 < &result03031', {
+                        '&v_CAPV_R5_C1': v_CAPV_R5_C1,
+                        '&result03031': result03031
+                    })
                 });
             }
         }
 
-        
 
-//-----------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------
 
 
 
@@ -2251,8 +2255,8 @@
         }
     }
 
-//     Ok.I have same error in this function. 
-// Fix  this. 
+    //     Ok.I have same error in this function. 
+    // Fix  this. 
     // function validate_rule_03114(param, index) {
     //     var f1 = param.fieldTemplate.replace('_COL_', 2);
     //     var f1_val = get_field_value(f1, index);
@@ -2292,10 +2296,10 @@
 
             // Verificăm dacă f2_val nu este gol și dacă f1_val este mai mic sau egal cu f2_val
             if (
-                f2_val !== '' && 
-            !isNaN(f1_val) && !isNaN(f2_val) 
-            && 
-            f1_val < f2_val) {
+                f2_val !== '' &&
+                !isNaN(f1_val) && !isNaN(f2_val)
+                &&
+                f1_val < f2_val) {
                 webform.errors.push({
                     'fieldName': f1,
                     'index': 0,
@@ -2925,3 +2929,4 @@
     }
 
 })(jQuery);
+;
