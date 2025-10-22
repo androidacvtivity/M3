@@ -1,0 +1,117 @@
+#dec_fiscCod_street {
+    width: 500px;
+}
+
+table .cell p {
+    text-align: center;
+}
+
+table .cell {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+table .cell-border {
+    border-bottom: 1px solid #9E9A99;
+}
+
+#CAPIa td.delrow,
+#FILIAL_CAPIa td.delrow {
+    min-width: 50px;
+}
+
+#mywebform-content .dynamic-section-index-wrapper input {
+    width: 30px;
+    outline: none;
+}
+
+.dynamic-section-index-wrapper label,
+.dynamic-section-cuatm label,
+.dynamic-section-region label {
+    display: inline-block;
+}
+
+.dynamic-section-index-wrapper,
+.dynamic-section-cuatm,
+.dynamic-section-region {
+    float: left;
+}
+
+.dynamic-section-dellrow {
+    float: right;
+    margin-right: 90px;
+}
+
+.dynamic-section-dellrow a {
+    font-weight: bold;
+}
+
+.FILIAL_CAPIa-CAPIa-wrapper {
+    margin-top: 20px;
+}
+
+#mywebform-content .grid-add-region {
+    margin-bottom: 30px;
+}
+
+.c1b {
+    margin-bottom: 30px;
+}
+
+.ml30 {
+    margin-left: 126px;
+}
+
+.dynamic-section-row {
+    margin-top: 20px;
+}
+
+.big-table-wrapper {
+    overflow-x: scroll;
+}
+
+.static-index {
+    text-align: right;
+    padding-right: 9px;
+}
+
+.preview .static-index {
+    text-align: right;
+    padding-right: 9px;
+}
+
+.dynamic-section-cuatm .select2-widget-wrapper {
+    display: inline-block;
+}
+
+.select2-container {
+    width: 210px !important;
+}
+
+label {
+    padding-right: 5px;
+}
+
+#dec_fiscCod_caem {
+    width: 300px;
+}
+
+#FILIAL_CAPII .grid-addrow,
+#CAPII .grid-addrow {
+    display: none;
+}
+
+#FILIAL_CAPII .delrow,
+#CAPII .delrow {
+    display: none;
+}
+
+#mywebform-content table tr td .date-y {
+    width: 70px;
+    margin: 0 10px 0 10px;
+}
+
+#mywebform-content table tr td .date-m {
+    width: 100px;
+    margin: 0 10px 0 10px;
+}
