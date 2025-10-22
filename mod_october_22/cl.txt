@@ -1,0 +1,10 @@
+Title page - CUATM
+SELECT LEFT(CASE WHEN TRIM(c.code) REGEXP '^[135]' AND CHAR_LENGTH(TRIM(c.code)) = 6 THEN CONCAT('0', TRIM(c.code)) ELSE TRIM(c.code) END , 4) AS code, CONCAT(LEFT(CASE WHEN TRIM(c.code) REGEXP '^[135]' AND CHAR_LENGTH(TRIM(c.code)) = 6 THEN CONCAT('0', TRIM(c.code)) ELSE TRIM(c.code) END, 4), ' - ',  t.name) FROM taxonomy_term_data t JOIN classifier_cuatm_full c ON c.tid = t.tid  WHERE c.prgs in ('5','3','4','6','8','9') AND c.code not in ('101000');
+
+
+Title page - Filial
+SELECT LEFT(CASE WHEN TRIM(c.code) REGEXP '^[135]' AND CHAR_LENGTH(TRIM(c.code)) = 6 THEN CONCAT('0', TRIM(c.code)) ELSE TRIM(c.code) END , 7) AS code, CONCAT(LEFT(CASE WHEN TRIM(c.code) REGEXP '^[135]' AND CHAR_LENGTH(TRIM(c.code)) = 6 THEN CONCAT('0', TRIM(c.code)) ELSE TRIM(c.code) END, 7), ' - ',  t.name) FROM taxonomy_term_data t JOIN classifier_cuatm_full c ON c.tid = t.tid  WHERE c.prgs in ('2') AND c.code not in ('0000000','1111111','2222222','3333333');
+
+
+
+
