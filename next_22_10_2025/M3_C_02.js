@@ -2064,17 +2064,17 @@
             var t1_val = toFloat(get_field_value(param.t1, index, parentIndex));
             var t2_val = toFloat(get_field_value(param.t2, index, parentIndex));
             var result = (t2_val * 1000 / t1_val) / 12;
-            var msg = Drupal.t('Cap. II., Rândul @row, col. 1F * 1000 / Cap. I., Rândul @row, Col.2F / 12 => 5000 < 20000, pentru fiecare rând Femei, (@result)', {
+            var msg = Drupal.t('Cap. II., Rândul @row, col. 1F * 1000 / Cap. I., Rândul @row, Col.2F / 12 => 5500 < 20000, pentru fiecare rând Femei, (@result)', {
                 '@row': getRowFromFieldName(param.t1, index),
                 '@result': formatNumber(result, 2)
             });
 
             var report_year = String(Drupal.settings.mywebform.values.dec_fiscCod1_datefisc).split('/');
             report_year = report_year.length == 2 && report_year[1] ? Number(report_year[1]) : new Date().getFullYear() - 1;
-            var mutable_value = report_year >= 2021 ? 5000 : 2000;
+            var mutable_value = report_year >= 2021 ? 5500 : 2000;
 
             if (result < mutable_value || result >= 20000) {
-                webform.warnings.push({
+                webform.errors.push({
                     'fieldName': param.t1,
                     'index': index,
                     'parentIndex': parentIndex,
@@ -2167,7 +2167,7 @@
             var t2_T = get_field_value(param.t2_T, index, parentIndex);
             var t2_F = get_field_value(param.t2_F, index, parentIndex);
             var result = (t2_T - t2_F) * 1000 / (t1_T - t1_F) / 12;
-            var msg = Drupal.t('Cap. II., Rândul @row, col. 1 (T-F) * 1000 / Cap. I., Rândul @row, Col. 2 (T-F) / 12 => 5000 < 20000 pt fiecare rînd (@result)', {
+            var msg = Drupal.t('Cap. II., Rândul @row, col. 1 (T-F) * 1000 / Cap. I., Rândul @row, Col. 2 (T-F) / 12 => 5500 < 20000 pt fiecare rînd (@result)', {
                 '@row': getRowFromFieldName(param.t1_T, index),
                 '@result': formatNumber(result, 2)
             });
@@ -2175,10 +2175,10 @@
             var report_year = String(Drupal.settings.mywebform.values.YEAR).split('/');
             report_year = report_year.length == 2 && report_year[1] ? Number(report_year[1]) : new Date().getFullYear() - 1;
             //var mutable_value = report_year >= 2020 ? 2000 : 1100;
-            var mutable_value = 5000;
+            var mutable_value = 5500;
 
             if (result < mutable_value || result >= 20000) {
-                webform.warnings.push({
+                webform.errors.push({
                     'fieldName': param.t1_T,
                     'index': index,
                     'parentIndex': parentIndex,
