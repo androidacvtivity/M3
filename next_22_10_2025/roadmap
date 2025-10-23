@@ -16,3 +16,14 @@ Step 2
  Step. 4 
 
  1.1 Modify the tables - html code - exclude column 10. In both tables and give me the code in the file
+
+
+ Step. 5
+
+ Analizeaza fisierul. Si dupa exemplu validarilor 
+ creaza o validare noua 
+ 03-013.1  Cap II (T-F), Col.6*100/ Col.1 apartine intervalului [8%-10%] - ca functie 
+
+ dupa exemplu 
+ 03-013 Cap II (F), Col.6*100/ Col.1 apartine intervalului [8%-10%]
+ si exemplu 03-127 Cap.2 col. 1(T-F)*1000/Cap.1 Col.2(T-F)/12=>5500<20000
