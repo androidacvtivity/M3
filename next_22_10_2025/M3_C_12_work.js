@@ -112,6 +112,32 @@
 
     Drupal.behaviors.munca3 = {
         attach: function (context) {
+
+        watchAutoSum_CAPIa_R01_T_C2();
+
+
+            // când se adaugă sau șterge rânduri/secțiuni la FILIAL_CAPIa
+            jQuery('#FILIAL_CAPIa').on('row_added row_deleted', function () {
+                // DOM-ul s-a schimbat => reatașăm ascultători și recalculem
+                watchAutoSum_CAPIa_R01_T_C2();
+            });
+
+            // dacă ai evenimente similare pe wrapper-ele de rând din filial (după cum ai deja prin cod):
+            jQuery('#FILIAL_CAPIa').on('row_added', '.FILIAL_CAPIa-CAPIa-wrapper', function () {
+                watchAutoSum_CAPIa_R01_T_C2();
+            });
+            jQuery('#FILIAL_CAPIa').on('row_deleted', '.FILIAL_CAPIa-CAPIa-wrapper', function () {
+                watchAutoSum_CAPIa_R01_T_C2();
+            });
+
+            // când se adaugă sau șterge rânduri/secțiuni la FILIAL_CAPIa
+            jQuery('#FILIAL_CAPIa').on('row_added row_deleted', function () {
+                // DOM-ul s-a schimbat => reatașăm ascultători și recalculem
+                watchAutoSum_CAPIa_R01_T_C2();
+            });
+
+            
+
             jQuery('#mywebform-edit-form').on('change', '.dynamic-cuatm', function () {
                 var cuatm = jQuery(this).val();
                 //var region = get_region_by_cuatm(cuatm);
@@ -3050,3 +3076,86 @@ case '03137':
     }
 })(jQuery);
 ;
+
+// --- AUTOSUMĂ pe CAPIa_R01_T_C2 din filiale -------------------------------
+// Condiție: dacă există cel puțin o secțiune FILIAL (CAPIa_CUATM_R_INDEX_FILIAL-1),
+// atunci CAPIa_R01_T_C2 devine soma automată a tuturor CAPIa_R01_T_C2_FILIAL-*
+(function () {
+    // culori/seletoare
+    var TARGET_ID = '#CAPIa_R01_T_C2';
+    var BGCOLOR = '#ebe9e6';      // cafeniu deschis ca în exemplu
+    var EVENTS = 'input change keyup blur';
+
+    function filialExists() {
+        var v = Drupal.settings.mywebform.values;
+        // există cel puțin 1 înregistrare filială?
+        return Array.isArray(v.CAPIa_CUATM_R_INDEX_FILIAL) && v.CAPIa_CUATM_R_INDEX_FILIAL.length > 0;
+    }
+
+    function listFilialInputs() {
+        // ID-urile de input pentru valorile pe filiale au forma #CAPIa_R01_T_C2_FILIAL-<idx>
+        // (Drupal generează “-<index>” pentru fiecare rând/filial.)
+        var inputs = [];
+        var v = Drupal.settings.mywebform.values;
+        if (!v.CAPIa_R01_T_C2_FILIAL) return inputs;
+
+        var count = v.CAPIa_R01_T_C2_FILIAL.length;
+        for (var i = 1; i <= count; i++) {
+            inputs.push('#CAPIa_R01_T_C2_FILIAL-' + i);
+        }
+        return inputs;
+    }
+
+    function getFloat(val) { var x = parseFloat(val); return isNaN(x) ? 0 : x; }
+
+    function updateSum() {
+        if (!filialExists()) return;
+        var total = 0;
+        listFilialInputs().forEach(function (sel) {
+            var $el = jQuery(sel);
+            if ($el.length) total += getFloat($el.val());
+        });
+        if (total > 0) {
+            jQuery(TARGET_ID).val(total);
+        } else {
+            jQuery(TARGET_ID).val('');
+        }
+    }
+
+    function makeReadOnlyLook() {
+        // td + input ca la exemplu
+        var $cell = jQuery(TARGET_ID).closest('td');
+        $cell.css({ 'background-color': BGCOLOR, 'padding': '4px' });
+        jQuery(TARGET_ID).css({
+            'background-color': 'transparent',
+            'border': 'none',
+            'text-align': 'right'
+        });
+        jQuery(TARGET_ID).prop('readonly', true);
+    }
+
+    function restoreLook() {
+        var $cell = jQuery(TARGET_ID).closest('td');
+        // revenire la parametrii inițiali (minim: scoatem readonly + stilările aplicate)
+        jQuery(TARGET_ID).prop('readonly', false);
+        jQuery(TARGET_ID).css({ 'background-color': '', 'border': '', 'text-align': '' });
+        $cell.css({ 'background-color': '', 'padding': '' });
+    }
+
+    // expunem o funcție globală pentru (re)activare la adăugare/ștergere rânduri
+    window.watchAutoSum_CAPIa_R01_T_C2 = function () {
+        // dezlegăm orice ascultători vechi
+        listFilialInputs().forEach(function (sel) { jQuery(sel).off(EVENTS, updateSum); });
+
+        if (filialExists()) {
+            makeReadOnlyLook();
+            // leagă ascultători pe toate inputurile filială corespunzătoare
+            listFilialInputs().forEach(function (sel) { jQuery(sel).on(EVENTS, updateSum); });
+            // calculează inițial
+            updateSum();
+        } else {
+            // fără filiale: revenim la stare normală
+            restoreLook();
+        }
+    };
+})();
