@@ -35,48 +35,44 @@ Step 2
  Verifica -	03-015.1 - Formule pentru calculul -	03-015.1 = (Col.7 (T) – col.7 (F))*100/((Col.1 (T) – Col.6 (T)) – ((Col.1 (F) – Col.6 (F)) este aceasta ?
 
 
- Verifica inca odata 
  
- 03-015	
+
+Acum daca sunt 2 filiale si daca completezi nu mai 2 filiala nu se calculeaza nimic. Dar validarea statica  03-084 - functioneaza corect 
+ Este validare  03-084 care vifica suma dintre tabelul principal si filiale - si care functioneaza corect - si cu 2 si cu 3 filiale 
+
+
+CAPIa_R_F_C2_FILIAL-1-1 - Se calculeaza si se afiseaza corect 
+
+
+
+CAPIa_R_F_C2_FILIAL-2-1 in tabelul primar nimic 
+
+CAPIa_R_T_C2_FILIAL-1-1 
+
+De ja mai bine
+
+Dar mai sunt randurile dinamice 
+
+CAPIa_R_T_C2_FILIAL-1-1 - Se calculeza  
+
+CAPIa_R_F_C2_FILIAL-1-1 -- Se calculeza 
+
+CAPIa_R_T_C2_FILIAL-1-1  - se calculeaza 
+
+CAPIa_R_F_C2_FILIAL-1-1  -  se calculeaza 
+
+CAPIa_R01_T_C2_FILIAL-2  -  Calculeza 
+CAPIa_R01_F_C2_FILIAL-2  -  Calculeza 
+
+CAPIa_R_T_C2_FILIAL-2-1  - Nu se calculeaza 
+
+CAPIa_R_F_C2_FILIAL-2-1  - Nu se calculeaza 
  
- trebuie sa fie -- 
- Cap II (F), Col.7*100/ (Col.1-Col.6) apartine intervalului [1%-13%]
-
- Analizeaza fisierile prezentate si 
-
- In raport este validarea 03-084 validate_rule_03084
-  'Valoarea din @table (tab. de bază), Rândul @row, Col.@col, trebuie să fie egală cu suma valorilor similare pentru fiecare activitate (pe tabelele adaugătoare), (@result).', 
-
-Acum, trebuie de creat o autosuma in js - eu am exemplu - noi am lucrat anterior la un raport  
-Exemplu watchAutoSum_134 () din inov_90_180.js aceasta functie este in Drupal.behaviors.
 
 
-In cazul nostru la creare autosumei vom avea o conditie 
+ In - CAPIa_CUATM_R_INDEX_FILIAL-2 
 
+ CAPIa_R_T_C2_FILIAL-2-1  - Nu se calculeaza 
 
-daca in raport avem CAPIa_CUATM_R_INDEX_FILIAL-1 -adica sa creat un tabel nou pentru CAPIa FILIAL_CAPIa 
+ CAPIa_R_F_C2_FILIAL-2-1 - Nu se calculeaza  
 
-
-Acum facem autosuma in js concret pentru o coloana si rand - 
-Pentru  CAPIa_R01_T_C2
-
-Deci, conditia 
-
-Daca avem CAPIa_CUATM_R_INDEX_FILIAL-1 
-atunci CAPIa_R01_T_C2 devine autosuma si devine de culoare cafenie si readonly 
-
-si este autosuma la CAPIa_R01_T_C2_FILIAL-1,CAPIa_R01_T_C2_FILIAL-n   daca nu ste CAPIa_CUATM_R_INDEX_FILIAL-1 
-revine parametri initiali 
-
-
-/* ==========================================================================
- * PATCH: AUTOSUMĂ pentru CAPIa_R01_T_C2 (Total)
- * - Dacă există cel puțin o secțiune filială (CAPIa_CUATM_R_INDEX_FILIAL-1),
- *   CAPIa_R01_T_C2 devine sumă automată a CAPIa_R01_T_C2_FILIAL-1..n,
- *   capătă fundal cafeniu și devine readonly.
- * - Dacă NU există filiale, revine la parametrii inițiali.
- * Integrare: se poate include ca fișier separat după M3_C_11.js
-*            sau se poate lipi la finalul M3_C_11.js.
-* ========================================================================== */
-
-Aici adauga si pentru CAPIa_R01_T_4 - CAPIa_R01_T_C10
