@@ -67,3 +67,16 @@ atunci CAPIa_R01_T_C2 devine autosuma si devine de culoare cafenie si readonly
 
 si este autosuma la CAPIa_R01_T_C2_FILIAL-1,CAPIa_R01_T_C2_FILIAL-n   daca nu ste CAPIa_CUATM_R_INDEX_FILIAL-1 
 revine parametri initiali 
+
+
+/* ==========================================================================
+ * PATCH: AUTOSUMĂ pentru CAPIa_R01_T_C2 (Total)
+ * - Dacă există cel puțin o secțiune filială (CAPIa_CUATM_R_INDEX_FILIAL-1),
+ *   CAPIa_R01_T_C2 devine sumă automată a CAPIa_R01_T_C2_FILIAL-1..n,
+ *   capătă fundal cafeniu și devine readonly.
+ * - Dacă NU există filiale, revine la parametrii inițiali.
+ * Integrare: se poate include ca fișier separat după M3_C_11.js
+*            sau se poate lipi la finalul M3_C_11.js.
+* ========================================================================== */
+
+Aici adauga si pentru CAPIa_R01_T_4 - CAPIa_R01_T_C10

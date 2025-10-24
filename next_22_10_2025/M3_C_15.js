@@ -3051,22 +3051,30 @@ case '03137':
 })(jQuery);
 ;
 
-
 /* ==========================================================================
- * PATCH: AUTOSUMĂ pentru CAPIa_R01_T_C2 (Total)
+ * PATCH: AUTOSUMĂ pentru CAPIa_R01_T_C2 și CAPIa_R01_T_C4..C10 (Total)
  * - Dacă există cel puțin o secțiune filială (CAPIa_CUATM_R_INDEX_FILIAL-1),
- *   CAPIa_R01_T_C2 devine sumă automată a CAPIa_R01_T_C2_FILIAL-1..n,
- *   capătă fundal cafeniu și devine readonly.
- * - Dacă NU există filiale, revine la parametrii inițiali.
- * Integrare: se poate include ca fișier separat după M3_C_11.js
- *            sau se poate lipi la finalul M3_C_11.js.
+ *   câmpurile devin sumă automată a valorilor corespunzătoare din filiale:
+ *     CAPIa_R01_T_CX = SUM(CAPIa_R01_T_CX_FILIAL-1..n), pentru X ∈ {2,4,5,6,7,8,9,10}
+ *   capătă fundal cafeniu și devin readonly.
+ * - Dacă NU există filiale, revin la parametrii inițiali.
+ * Integrare: include acest fișier după M3_C_11.js sau lipește-l la finalul lui.
  * ========================================================================== */
 (function ($, Drupal) {
     'use strict';
 
-    var TARGET_ID = '#CAPIa_R01_T_C2';
     var BGCOLOR = '#ebe9e6'; // cafeniu deschis
     var EVENTS = 'input change keyup blur';
+    var TARGETS = [
+        { id: '#CAPIa_R01_T_C2', filialKey: 'CAPIa_R01_T_C2_FILIAL' },
+        { id: '#CAPIa_R01_T_C4', filialKey: 'CAPIa_R01_T_C4_FILIAL' },
+        { id: '#CAPIa_R01_T_C5', filialKey: 'CAPIa_R01_T_C5_FILIAL' },
+        { id: '#CAPIa_R01_T_C6', filialKey: 'CAPIa_R01_T_C6_FILIAL' },
+        { id: '#CAPIa_R01_T_C7', filialKey: 'CAPIa_R01_T_C7_FILIAL' },
+        { id: '#CAPIa_R01_T_C8', filialKey: 'CAPIa_R01_T_C8_FILIAL' },
+        { id: '#CAPIa_R01_T_C9', filialKey: 'CAPIa_R01_T_C9_FILIAL' },
+        { id: '#CAPIa_R01_T_C10', filialKey: 'CAPIa_R01_T_C10_FILIAL' }
+    ];
 
     function getValues() {
         return (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values) || {};
@@ -3077,33 +3085,32 @@ case '03137':
         return v.CAPIa_CUATM_R_INDEX_FILIAL && Array.isArray(v.CAPIa_CUATM_R_INDEX_FILIAL) && v.CAPIa_CUATM_R_INDEX_FILIAL.length > 0;
     }
 
-    function listFilialInputs() {
+    function listFilialInputs(filialKey) {
         var v = getValues();
         var sels = [];
-        var arr = v.CAPIa_R01_T_C2_FILIAL;
+        var arr = v[filialKey];
         if (!arr || !Array.isArray(arr)) return sels;
         for (var i = 1; i <= arr.length; i++) {
-            sels.push('#CAPIa_R01_T_C2_FILIAL-' + i);
+            sels.push('#' + filialKey + '-' + i);
         }
         return sels;
     }
 
     function toNum(x) { var f = parseFloat(x); return isNaN(f) ? 0 : f; }
 
-    function updateSum() {
+    function updateSumFor(targetId, filialKey) {
         if (!filialExists()) return;
-        var total = 0;
-        var found = false;
-        listFilialInputs().forEach(function (sel) {
+        var total = 0, found = false;
+        listFilialInputs(filialKey).forEach(function (sel) {
             var $el = $(sel);
             if ($el.length) { total += toNum($el.val()); found = true; }
         });
-        if (!$(TARGET_ID).length) return;
-        $(TARGET_ID).val(found && total !== 0 ? total : (found ? '' : $(TARGET_ID).val())).trigger('change');
+        if (!$(targetId).length) return;
+        $(targetId).val(found && total !== 0 ? total : (found ? '' : $(targetId).val())).trigger('change');
     }
 
-    function makeReadOnlyLook() {
-        var $input = $(TARGET_ID);
+    function makeReadOnlyLook(targetId) {
+        var $input = $(targetId);
         if (!$input.length) return;
         var $cell = $input.closest('td');
         $cell.css({ 'background-color': BGCOLOR, 'padding': '4px' });
@@ -3111,8 +3118,8 @@ case '03137':
         $input.prop('readonly', true);
     }
 
-    function restoreLook() {
-        var $input = $(TARGET_ID);
+    function restoreLook(targetId) {
+        var $input = $(targetId);
         if (!$input.length) return;
         var $cell = $input.closest('td');
         $input.prop('readonly', false);
@@ -3120,31 +3127,37 @@ case '03137':
         $cell.css({ 'background-color': '', 'padding': '' });
     }
 
-    // Expunem global pentru a putea fi reapelată după schimbări în rândurile de filiale
-    window.watchAutoSum_CAPIa_R01_T_C2 = function () {
-        // curățăm ascultătorii vechi
-        listFilialInputs().forEach(function (sel) { $(sel).off(EVENTS, updateSum); });
+    // Expunem global pentru (re)activare după schimbări în rândurile de filiale
+    window.watchAutoSum_CAPIa_R01_T_MULTI = function () {
+        // curățăm ascultătorii vechi pentru toate țintele
+        TARGETS.forEach(function (t) {
+            listFilialInputs(t.filialKey).forEach(function (sel) { $(sel).off(EVENTS); });
+        });
 
         if (filialExists()) {
-            makeReadOnlyLook();
-            listFilialInputs().forEach(function (sel) { $(sel).on(EVENTS, updateSum); });
-            updateSum();
+            TARGETS.forEach(function (t) {
+                makeReadOnlyLook(t.id);
+                listFilialInputs(t.filialKey).forEach(function (sel) {
+                    $(sel).on(EVENTS, function () { updateSumFor(t.id, t.filialKey); });
+                });
+                updateSumFor(t.id, t.filialKey);
+            });
         } else {
-            restoreLook();
+            TARGETS.forEach(function (t) { restoreLook(t.id); });
         }
     };
 
-    // Integrare non-invazivă: dacă comportamentul munca3 e deja atașat, doar abonăm evenimentele
+    // Inițializare + reatașare la adăugare/ștergere rânduri filiale
     $(function () {
-        if (typeof window.watchAutoSum_CAPIa_R01_T_C2 === 'function') {
-            window.watchAutoSum_CAPIa_R01_T_C2();
+        if (typeof window.watchAutoSum_CAPIa_R01_T_MULTI === 'function') {
+            window.watchAutoSum_CAPIa_R01_T_MULTI();
         }
-        // reatașăm la adăugare/ștergere rânduri în FILIAL_CAPIa
         $('#FILIAL_CAPIa').on('row_added row_deleted', function () {
-            if (typeof window.watchAutoSum_CAPIa_R01_T_C2 === 'function') {
-                window.watchAutoSum_CAPIa_R01_T_C2();
+            if (typeof window.watchAutoSum_CAPIa_R01_T_MULTI === 'function') {
+                window.watchAutoSum_CAPIa_R01_T_MULTI();
             }
         });
     });
 
 })(jQuery, Drupal);
+
