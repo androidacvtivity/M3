@@ -1431,51 +1431,58 @@
         }
     }
 
+
+    // 
+  
     function validate_rule_03015(fieldsInfo, index, parentIndex) {
-        var f1 = get_field_value(fieldsInfo.f1, index, parentIndex);
-        var f2 = get_field_value(fieldsInfo.f2, index, parentIndex);
-        var f3 = get_field_value(fieldsInfo.f3, index, parentIndex);
-        //var f4 = get_field_value(fieldsInfo.f4, index, parentIndex);
-        var rez = toFloat((toFloat(f1) * 100) / (toFloat(f2) - toFloat(f3)));
-        var matches = fieldsInfo.f1.match(/([T|F])+_C(\d)/);
+        var f1 = get_field_value(fieldsInfo.f1, index, parentIndex); // Col.7 (C8)
+        var f2 = get_field_value(fieldsInfo.f2, index, parentIndex); // Col.1 (C2)
+        var f3 = get_field_value(fieldsInfo.f3, index, parentIndex); // Col.6 (C7)
+
+        // F-only: dacă e Total (T), ieșim
+        var matches = fieldsInfo.f1.match(/([TF])_C(\d+)/);
+        if (matches && matches[1] === 'T') { return; }
+
+        // Determină ce câmpuri verificăm pentru "rând completat":
+        // preferăm c2/c7/c8 dacă există în fieldsInfo; altfel folosim f2/f3/f1.
+        var candidates = [];
+        if (fieldsInfo.c2) { candidates.push(fieldsInfo.c2); } else if (fieldsInfo.f2) { candidates.push(fieldsInfo.f2); }
+        if (fieldsInfo.c7) { candidates.push(fieldsInfo.c7); } else if (fieldsInfo.f3) { candidates.push(fieldsInfo.f3); }
+        if (fieldsInfo.c8) { candidates.push(fieldsInfo.c8); } else if (fieldsInfo.f1) { candidates.push(fieldsInfo.f1); }
+
         var rowIsFilled = false;
-
-        var cols = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-        if (matches) {
-            if (matches[2] == 'F') {
-                cols = [2, 7, 8];
-            }
-
-            for (var k = 0; k < cols.length; k++) {
-                var col = cols[k];
-                var field = fieldsInfo.f1.replace(matches[1] + '_C' + matches[2], matches[1] + '_C' + col);
-                var field_val = get_field_value(field, index, parentIndex);
-
-                if (field_val != '' || field_val != 'undefined') {
-                    rowIsFilled = true;
-                    break;
-                }
+        for (var i = 0; i < candidates.length; i++) {
+            var fld = candidates[i];
+            if (fld && field_exists(fld, index, parentIndex)) {
+                var v = get_field_value(fld, index, parentIndex);
+                if (v !== '' && v !== null && typeof v !== 'undefined') { rowIsFilled = true; break; }
             }
         }
 
-        if (rowIsFilled && (rez < 1 || rez > 13) || rez == 'Infinity') {
-            var msg = Drupal.t('Cap II., Rândul @row, Col7 * 100 / Rândul @row, (Col1-Col6) trebuie să fie în intervalul [1%-13%], (@result)', {
-                '@row': getRowFromFieldName(fieldsInfo.f1, index),
-                '@result': formatNumber(rez, 2)
-            });
+        // calculează doar dacă rândul e completat și denominatorul e valid
+        var denom = toFloat(f2) - toFloat(f3);
+        if (!rowIsFilled || !denom) { return; }
+
+        var rez = toFloat((toFloat(f1) * 100) / denom);
+
+        if (!isFinite(rez) || rez < 1 || rez > 13) {
+            var msg = Drupal.t(
+                'Cap II., Rândul @row, (Col.7 * 100 / (Col.1 - Col.6)) trebuie să fie în intervalul [1%-13%], (@result)',
+                { '@row': getRowFromFieldName(fieldsInfo.f1, index), '@result': formatNumber(rez, 2) }
+            );
             webform.warnings.push({
                 'fieldName': fieldsInfo.f1,
                 'index': index,
                 'parentIndex': parentIndex,
                 'weight': 15,
-                'options': {
-                    'hide_title': true
-                },
+                'options': { 'hide_title': true },
                 'msg': generateMessageTitle('03-015', msg, fieldsInfo.f1, index, parentIndex)
             });
         }
     }
 
+
+    // 
     function validate_rule_03076(fieldsInfo, index, parentIndex) {
         var values = Drupal.settings.mywebform.values;
         var msg = Drupal.t('Cap. I.a., CAEM = Cap. II., CAEM, pentru toate Rând');

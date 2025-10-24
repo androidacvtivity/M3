@@ -27,3 +27,19 @@ Step 2
  dupa exemplu 
  03-013 Cap II (F), Col.6*100/ Col.1 apartine intervalului [8%-10%]
  si exemplu 03-127 Cap.2 col. 1(T-F)*1000/Cap.1 Col.2(T-F)/12=>5500<20000
+
+
+ Verifica 03-015 - si modifica sa fie asa 03-015 Cap II (F), Col.7*100/ (Col.1-Col.6) apartine intervalului [1%-13%] si 
+ adauga o validare noua 03-015.1 Cap II (T-F), Col.7*100/ (Col.1-Col.6) apartine intervalului [1%-13%] - ambele warnings
+
+ Verifica -	03-015.1 - Formule pentru calculul -	03-015.1 = (Col.7 (T) – col.7 (F))*100/((Col.1 (T) – Col.6 (T)) – ((Col.1 (F) – Col.6 (F)) este aceasta ?
+
+
+ Verifica inca odata 
+ 
+ 03-015	
+ 
+ trebuie sa fie -- 
+ Cap II (F), Col.7*100/ (Col.1-Col.6) apartine intervalului [1%-13%]
+
+ 
