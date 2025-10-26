@@ -76,3 +76,12 @@ CAPIa_R_F_C2_FILIAL-2-1  - Nu se calculeaza
 
  CAPIa_R_F_C2_FILIAL-2-1 - Nu se calculeaza  
 
+
+
+Acum se calculeaza corect - 
+Dar - cand sa creat filiala - deodata in tabelul primar trebuie sa se coloreze si sa fie readonly toate randurile si coloanele necesare. Dar acum se coloreaza cate unul si cand se elimina filiala sa se elimine si valorile - si daca sa eliminat ultima filiala sa se ajunga la stare initiala  
+
+
+Se calculeaza corect - 
+
+Dar inca odata iti explica cand se creaza filiala 
