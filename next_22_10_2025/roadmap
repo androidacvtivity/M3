@@ -105,3 +105,16 @@ Da-mi nu mai codul modificat - adica validate_rule_03084 () - daca se modifca nu
 
 
 Super clar. Facem aplicația “offline-first” cu bază locală pre-încărcată (lista angajaților) și actualizare automată când există Internet.
+
+
+Daca selectezi   in CAP I 
+<span class="select2-selection__rendered" id="select2-CAPIa_R_T_C1-1-container" title="0113, Cultivarea legumelor si a pepenilor, a radacinoaselor si tuberculilor">0113, Cultivarea legumelor si a pepenilor, a radacinoaselor si tuberculilor</span>
+
+se selecteaza si in CAP II 
+
+<span class="select2-selection__rendered" id="select2-CAPII_R_T_C1-1-container" title="0113, Cultivarea legumelor si a pepenilor, a radacinoaselor si tuberculilor">0113, Cultivarea legumelor si a pepenilor, a radacinoaselor si tuberculilor</span>
+
+in timp real.
+
+Care cod din fisier face aceasta ? 
+
