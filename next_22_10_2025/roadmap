@@ -85,3 +85,7 @@ Dar - cand sa creat filiala - deodata in tabelul primar trebuie sa se coloreze s
 Se calculeaza corect - 
 
 Dar inca odata iti explica cand se creaza filiala 
+
+
+    Cod eroare: 03-084, Cap. I., Rândul "Total salariați", Col.1 - Valoarea din I. (tab. de bază), Rândul 0, Col.1, trebuie să fie egală cu suma valorilor similare pentru fiecare activitate (pe tabelele adaugătoare), (0.00).
+    Cod eroare: 03-084, Cap. I., Rândul "Total salariați", Col.1 - Valoarea din I. (tab. de bază), Rândul 1, Col.1, trebuie să fie egală cu suma valorilor similare pentru fiecare activitate (pe tabelele adaugătoare), (0.00).
