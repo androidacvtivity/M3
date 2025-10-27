@@ -164,3 +164,7 @@ dar in versiunea aceasta se soncronizeza in timp real CAP  1 cu CAP 2
 Ai exemplu la CAP 1 si CAP 2  dupa acest exemplu fa si cazul nostru 
 
 adica CAPIa_R_T_C1 si CAPII_R_T_C1 sa se sincronizeze cu CAEM 
+
+Ok. Acum se sincronizeaza 
+
+Dar trebuie  CAPIa_R01_T_C1  si  CAPII_R01_T_C1  dar nu si (CAPIa_R_T_C1-n si CAPII_R_T_C1-n)   
