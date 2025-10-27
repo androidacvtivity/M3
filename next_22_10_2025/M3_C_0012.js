@@ -167,7 +167,62 @@
                 
             });
 
-            
+            // ------------------------------------------
+
+            // ——— [PATCH] Real-time CAEM sync ———
+            // Pune acest cod în interiorul Drupal.behaviors.munca3.attach(), după linia
+            //   jQuery('#CAEM').on('mywebform:sync', function () { fill_main_caem_fields(); });
+
+            (function ($, Drupal) {
+                'use strict';
+
+                // helper local – setează valoarea pe Select2 în siguranță
+                function setSelect2ValueSafe(selector, value) {
+                    var $el = $(selector);
+                    if (!$el.length) return;
+                    if ($el.find('option[value="' + value + '"]').length) {
+                        $el.val(value).trigger('change');
+                    } else {
+                        // dacă opțiunea nu e încă în DOM (lazy), mai încercăm puțin mai târziu
+                        setTimeout(function () { setSelect2ValueSafe(selector, value); }, 150);
+                    }
+                }
+
+                // sincronizează CAEM principal → Cap. I & Cap. II (R01)
+                function sync_main_caem_to_headers() {
+                    var caem = (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values && Drupal.settings.mywebform.values.CAEM) || '';
+                    if (!caem) return;
+                    // folosim exact câmpurile pe care le umple deja fill_main_caem_fields()
+                    setSelect2ValueSafe('#CAPIa_R01_T_C1', caem);
+                    setSelect2ValueSafe('#CAPII_R01_T_C1', caem);
+                }
+
+                // 1) Evenimente de UI pe CAEM (select principal) – realtime
+                $('#CAEM')
+                    .on('change select2:select', function () {
+                        // ținem și settings în pas, apoi umplem capetele
+                        Drupal.settings.mywebform.values.CAEM = $(this).val();
+                        sync_main_caem_to_headers();
+                    });
+
+                // 2) Fallback: dacă CAEM e setat programatic (fără eveniment de UI), poll ușor
+                var __lastCAEM = null;
+                setInterval(function () {
+                    var cur = (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values && Drupal.settings.mywebform.values.CAEM) || '';
+                    if (cur !== __lastCAEM) {
+                        __lastCAEM = cur;
+                        sync_main_caem_to_headers();
+                    }
+                }, 300);
+
+                // 3) La încărcare: sincronizare imediată (în completarea fill_main_caem_fields())
+                $(function () { sync_main_caem_to_headers(); });
+
+            })(jQuery, Drupal);
+
+            //------------------------------------------
+
+
 
             jQuery('#mywebform-edit-form').on('mywebform:sync', 'select.dynamic-table-caem', function () {
                 fill_dynamic_table2_caem_field(jQuery(this));
