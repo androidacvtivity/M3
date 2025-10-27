@@ -98,13 +98,15 @@ Cod eroare: 03-084, Cap. I., Rândul "Total salariați", Col.1 - Valoarea din I.
 
 Da-mi nu mai codul modificat - adica validate_rule_03084 () - daca se modifca nu mai aceasta functie. 
 
+Modifica codul - trebuie sa facem cum in cazul sincronizarea CAEM dintre Cap. I și Cap. II 
+- Dar noi trebuie sa facem 
 
 
 
 
 
 
-Super clar. Facem aplicația “offline-first” cu bază locală pre-încărcată (lista angajaților) și actualizare automată când există Internet.
+
 
 
 Daca selectezi   in CAP I 
@@ -118,3 +120,47 @@ in timp real.
 
 Care cod din fisier face aceasta ? 
 
+
+Mai analizeaza inca odata 
+Trebuie de sincronizat in timp real    
+
+function get_caem() {
+        return Drupal.settings.mywebform.values.CAEM;
+    }
+
+    values.CAEM - Principal 
+
+    <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-CAPIa_R01_T_C1-container"><span class="select2-selection__rendered" id="select2-CAPIa_R01_T_C1-container" title=""></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span>
+
+
+    <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-CAPII_R01_T_C1-container"><span class="select2-selection__rendered" id="select2-CAPII_R01_T_C1-container" title=""></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span>
+
+
+    Adica daca se selecteaza un COD in Drupal.settings.mywebform.values.CAEM
+
+    sa se selecteze automat si in 
+    CAPIa_R01_T_C1-container si CAPII_R01_T_C1 - cum facem ?
+    Ce trebuie de adaugat in cod ? si cum ? 
+
+    Nu merge - Verifica din nou - 
+Dintre 
+    CAEM	Activitatea principală	dec/DataSet/Header/CAEM			custom	select			0	0	0	0	0	0	1	13	0	@cuiio_caem_code	<?php return declarations_get_caem_list('vocabulary_18'); ?>		text	0	0	300	0		0	
+    
+
+    si 
+
+
+CAPIa_R_T_C1	Rînd.CAEM col.1	dec/DataSet/Data/CAPIa/CAPIa_R[line]/CAPIa_R-T_C1	CAPIa		text	select2			0	0	0	0	0	0	0	14	0		<?php return declarations_get_caem_list('vocabulary_18'); ?>		table number dynamic-table-caem	0	0	10	0		0	
+
+CAPII_R_T_C1	Cap.II Rînd.CAEM col.1	dec/DataSet/Data/CAPII/CAPII_R[line]/CAPII_R-T_C1	CAPII		text	select2			0	0	0	0	0	1	0	14	0		<?php return declarations_get_caem_list('vocabulary_18'); ?>		table number dynamic-table2-caem	0	0	10	0		0
+
+
+adica CAPIa_R_T_C1 si CAPII_R_T_C1 sa se sincronizeze cu CAEM 
+
+
+Nu functioneaza - iti trimit versiunea anterioara - 
+in versiunea aceasta se sncronizeza dupa salvarea raportului, 
+dar in versiunea aceasta se soncronizeza in timp real CAP  1 cu CAP 2 
+Ai exemplu la CAP 1 si CAP 2  dupa acest exemplu fa si cazul nostru 
+
+adica CAPIa_R_T_C1 si CAPII_R_T_C1 sa se sincronizeze cu CAEM 

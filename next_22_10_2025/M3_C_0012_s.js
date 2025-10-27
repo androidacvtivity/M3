@@ -167,7 +167,101 @@
                 
             });
 
+            // ------------------------------------------
+
             
+            // ——— [PATCH] Real-time CAEM sync (improved) ———
+            // Sincronizează în timp real CAEM-ul principal (#CAEM / values.CAEM)
+            // către Cap. I (R01) și Cap. II (R01) — select2-urile #CAPIa_R01_T_C1 și #CAPII_R01_T_C1.
+            (function ($, Drupal) {
+              'use strict';
+
+              function get_caem_value() {
+                return (Drupal.settings
+                  && Drupal.settings.mywebform
+                  && Drupal.settings.mywebform.values
+                  && Drupal.settings.mywebform.values.CAEM) || '';
+              }
+
+              function setSelect2ValueSafe(selector, value, tries) {
+                var $el = $(selector);
+                if (!$el.length) return;
+
+                // Dacă e pluginul myWebformSelect2SetVal, îl folosim pentru consistență
+                if (typeof $el.myWebformSelect2SetVal === 'function') {
+                  $el.myWebformSelect2SetVal(value).trigger('change');
+                  return;
+                }
+
+                // Fallback: asigurăm existența opțiunii și setăm + trigger
+                if ($el.find('option[value="' + value + '"]').length) {
+                  $el.val(value).trigger('change.select2').trigger('change');
+                } else {
+                  var left = (typeof tries === 'number') ? tries : 12;
+                  if (left > 0) {
+                    setTimeout(function(){ setSelect2ValueSafe(selector, value, left - 1); }, 150);
+                  }
+                }
+              }
+
+              function sync_main_caem_to_headers() {
+                var caem = get_caem_value();
+                if (!caem) return;
+                setSelect2ValueSafe('#CAPIa_R01_T_C1', caem);
+                setSelect2ValueSafe('#CAPII_R01_T_C1', caem);
+              }
+
+              // UI events on main CAEM select
+              $('#CAEM').once('m3-caem-realtime-ui').on('change select2:select', function () {
+                var v = $(this).val() || '';
+                if (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values) {
+                  Drupal.settings.mywebform.values.CAEM = v;
+                }
+                sync_main_caem_to_headers();
+              });
+
+              // Poll for programmatic changes to values.CAEM
+              if (!window.__m3_caem_poll_started__) {
+                window.__m3_caem_poll_started__ = true;
+                var __lastCAEM = null;
+                setInterval(function () {
+                  var cur = get_caem_value();
+                  if (cur !== __lastCAEM) {
+                    __lastCAEM = cur;
+                    sync_main_caem_to_headers();
+                  }
+                }, 300);
+              }
+
+              // MutationObserver – dacă widget-urile apar dinamic prin AJAX
+              if (!window.__m3_caem_mo__) {
+                try {
+                  window.__m3_caem_mo__ = new MutationObserver(function () {
+                    // debounce scurt
+                    clearTimeout(window.__m3_caem_mo_tick__);
+                    window.__m3_caem_mo_tick__ = setTimeout(sync_main_caem_to_headers, 120);
+                  });
+                  window.__m3_caem_mo__.observe(document.body, { childList: true, subtree: true });
+                } catch (e) {
+                  // Fallback vechi
+                  $(document).on('DOMNodeInserted', (function () {
+                    var t;
+                    return function () {
+                      clearTimeout(t);
+                      t = setTimeout(sync_main_caem_to_headers, 150);
+                    };
+                  })());
+                }
+              }
+
+              // Initial kick
+              sync_main_caem_to_headers();
+
+            })(jQuery, Drupal);
+            //------------------------------------------
+
+
+
 
             jQuery('#mywebform-edit-form').on('mywebform:sync', 'select.dynamic-table-caem', function () {
                 fill_dynamic_table2_caem_field(jQuery(this));

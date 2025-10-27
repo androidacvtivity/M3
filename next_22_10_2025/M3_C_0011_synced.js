@@ -107,7 +107,9 @@
         'CAPIa_R01_T_C1',
         'CAPIa_R01_T_C1_FILIAL',
         'CAPII_R01_T_C1',
-        'CAPII_R01_T_C1_FILIAL'
+        'CAPII_R01_T_C1_FILIAL',
+        'CAPIa_R_T_C1',
+        'CAPII_R_T_C1'
     ];
 
     Drupal.behaviors.munca3 = {
@@ -164,12 +166,17 @@
 
             jQuery('#CAEM').on('mywebform:sync', function () {
                 fill_main_caem_fields();
-                
             });
 
-            
-
-            jQuery('#mywebform-edit-form').on('mywebform:sync', 'select.dynamic-table-caem', function () {
+            // [PATCH] Real-time CAEM sync (change/select2)
+            jQuery('#CAEM').once('caem-realtime').on('change select2:select', function(){
+                var v = jQuery(this).val() || '';
+                if (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values){
+                    Drupal.settings.mywebform.values.CAEM = v;
+                }
+                fill_main_caem_fields();
+            });
+jQuery('#mywebform-edit-form').on('mywebform:sync', 'select.dynamic-table-caem', function () {
                 fill_dynamic_table2_caem_field(jQuery(this));
             });
 
@@ -182,6 +189,8 @@
             });
 
             jQuery('#CAPIa').on('row_added', function () {
+                // [PATCH] Real-time CAEM sync on row add (Cap. I & II)
+                fill_main_caem_fields();
                 var gridObject = jQuery(this).getGridObject();
                 var $grid2 = jQuery('#CAPII');
                 if (gridObject.count > 1) {
@@ -194,6 +203,8 @@
             });
 
             jQuery('#FILIAL_CAPIa').on('row_added', function (event) {
+                // [PATCH] Real-time CAEM sync when filial row is added
+                fill_main_caem_fields();
                 jQuery('#FILIAL_CAPII .FILIAL_CAPII-grid-addrow').trigger('click');
             });
 
