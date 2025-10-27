@@ -89,3 +89,19 @@ Dar inca odata iti explica cand se creaza filiala
 
     Cod eroare: 03-084, Cap. I., Rândul "Total salariați", Col.1 - Valoarea din I. (tab. de bază), Rândul 0, Col.1, trebuie să fie egală cu suma valorilor similare pentru fiecare activitate (pe tabelele adaugătoare), (0.00).
     Cod eroare: 03-084, Cap. I., Rândul "Total salariați", Col.1 - Valoarea din I. (tab. de bază), Rândul 1, Col.1, trebuie să fie egală cu suma valorilor similare pentru fiecare activitate (pe tabelele adaugătoare), (0.00).
+
+
+Analizeaza  codul js - fisierul cu care lucrezi in Dripal - Raportul M3 
+Modifica validarea 03-084 -- validate_rule_03084(param, index)
+Cod eroare: 03-084, Cap. I., Rândul "Total salariați", Col.1 - Valoarea din I. (tab. de bază) (de adaugat afisarea valorii), Rândul 0, Col.1, trebuie să fie egală cu suma valorilor similare pentru fiecare activitate (pe tabelele adaugătoare), (33.00).
+
+
+Da-mi nu mai codul modificat - adica validate_rule_03084 () - daca se modifca nu mai aceasta functie. 
+
+
+
+
+
+
+
+Super clar. Facem aplicația “offline-first” cu bază locală pre-încărcată (lista angajaților) și actualizare automată când există Internet.
