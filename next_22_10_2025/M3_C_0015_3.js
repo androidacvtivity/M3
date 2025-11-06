@@ -162,9 +162,17 @@
                 fix_autocalc_fields(jQuery(this));
             });
 
-            jQuery('#CAEM').on('mywebform:sync', function () {
-                fill_main_caem_fields();
+            jQuery('#CAEM').on('mywebform:sync', function () { fill_main_caem_fields(); });
+            // [PATCH] Real-time CAEM sync for headers only (R01)
+            jQuery('#CAEM').once('caem-realtime-r01').on('change select2:select', function(){
+                var v = jQuery(this).val() || '';
+                if (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values){
+                    Drupal.settings.mywebform.values.CAEM = v;
+                }
+                fill_main_caem_fields(); // updates #CAPIa_R01_T_C1 and #CAPII_R01_T_C1
             });
+
+            
 
             jQuery('#mywebform-edit-form').on('mywebform:sync', 'select.dynamic-table-caem', function () {
                 fill_dynamic_table2_caem_field(jQuery(this));
@@ -229,6 +237,10 @@
         }
     };
 
+
+
+
+    
     webform.afterLoad.munca3 = function () {
         if (!Drupal.settings.mywebform.preview) {
             fill_main_caem_fields();
@@ -414,36 +426,9 @@
     webform.validators.validate_m3 = function () {
         var values = Drupal.settings.mywebform.values;
 
-        //----------------------------------------------------------------------------------------------------
-        //03-092   
-        // Ok.I have same error in this code
-        // Fix  this. 
-        //But without the comma after the zero here. Here integers not floats
-        // var comparison_fields_table3 = [
-        //     { 'f1': 'CAPIII_R1_C1', 'f2': 'CAPIII_R1_C2', 'row': 1 },
-        //     { 'f1': 'CAPIII_R2_C1', 'f2': 'CAPIII_R2_C2', 'row': 2 },
-        //     { 'f1': 'CAPIII_R3_C1', 'f2': 'CAPIII_R3_C2', 'row': 3 },
-        //     { 'f1': 'CAPIII_R4_C1', 'f2': 'CAPIII_R4_C2', 'row': 4 },
-        // ];
+        //M3_C_0015_3.js - Version 
 
-        // for (i = 0; i < comparison_fields_table3.length; i++) {
-        //     var f1 = Drupal.settings.mywebform.values[comparison_fields_table3[i].f1];
-        //     var f2 = Drupal.settings.mywebform.values[comparison_fields_table3[i].f2];
-
-        //     if (toFloat(f1) < toFloat(f2)) {
-        //         webform.errors.push({
-        //             'fieldName': comparison_fields_table3[i].f2,
-        //             'index': i,
-        //             'weight': 92,
-        //             'options': {
-        //                 'hide_title': true
-        //             },
-        //             'msg': Drupal.t('Cod eroare: 03-092 - CAP.III., Rândul @row, col. 2 <= Rândul @row, col. 1', {
-        //                 '@row': comparison_fields_table3[i].row
-        //             })
-        //         });
-        //     }
-        // }
+        
 
         var comparison_fields_table3 = [
             { 'f1': 'CAPIII_R1_C1', 'f2': 'CAPIII_R1_C2', 'row': 1 },
@@ -471,20 +456,7 @@
             }
         }
 
-        //03-092
-        //-------------------------------------------------------------------
-        //Here a character after the comma
-        // if (toFloat(values.CAPV_R3_1_1_C1) > toFloat(values.CAPV_R3_1_C1)) {
-        //     webform.errors.push({
-        //         'fieldName': 'CAPV_R3_1_1_C1',
-        //         'index': 0,
-        //         'weight': 94,
-        //         'options': {
-        //             'hide_title': true
-        //         },
-        //         'msg': Drupal.t('Cod eroare: 03-094 - CAP.V: Rândul 3.1.1<= Rândul 3.1')
-        //     });
-        //}
+        
 
         // Define a function to parse float values and remove non-numeric characters
         function parseFloatWithCharacter(value) {
@@ -515,21 +487,7 @@
         //-----------------------------------------------------------------------------
         var cap1a_c1_00T = 0;
         cap1a_c1_00T = toFloat(values.CAPIa_R00_T_C2);
-        // var CAPIII_R1_C1  = 0;
-        // CAPIII_R1_C1 = toFloat(values.CAPIII_R1_C1);
 
-
-        // if (cap1a_c1_00T < CAPIII_R1_C1) {
-        //     webform.warnings.push({
-        //         'fieldName': 'CAPIII_R1_C1',
-        //         'index': 0,
-        //         'weight': 139,
-        //         'options': {
-        //             'hide_title': true
-        //         },
-        //         'msg': Drupal.t('Cod eroare: 03-066 - Cap III, Col.1, Rândul 1-4 <= Cap I,  Col.1, „Total salariați”, Rândul 1  pentru fiecare rând aparte')
-        //     });
-        // }
 
         var cap3_c1_fields = [
             { 'field': 'CAPIII_R1_C1', 'row': 1 },
@@ -612,64 +570,7 @@
                 });
             }
         }
-        //trebuie sters?
-        /*var val_t2_r0_c9t = toFloat(values.dec_dynamicTable2_r0_c9t);
-        var val_t5_row_r411c1 = toFloat(values.dec_table5_row_r411c1);
-        if (val_t2_r0_c9t == val_t5_row_r411c1) {
-          webform.warnings.push({
-            'fieldName' : 'dec_table5_row_r411c1',
-            'index' : 0,
-            'weight': 146,
-            'options': {
-              'hide_title': true
-            },
-            'msg' : Drupal.t('Cod eroare: 03-146 - Cap.II, R.00-T, Col.9 ≠ Cap.V, R.4.1.1, (@val1 ; @val2)', {
-              '@val1': formatNumber(val_t2_r0_c9t, 2),
-              '@val2': formatNumber(val_t5_row_r411c1, 2)
-            })
-          });
-         }*/
-
-        //------------------------------------------------------------------------
-        // Is is code Js in Drupal. 
-        //Float type variables are introduced.
-        //Enter the following variables with the following numbers
-        //values.CAPV_R5_C1 = 79
-        //values.CAPV_R6_C1 = 4
-        //values.CAPV_R7_C1 = 
-        // var result03031 = 0;
-        // result03031 = toFloat(toFloat(values.CAPV_R6_C1) + toFloat(values.CAPV_R7_C1) + toFloat(values.CAPV_R8_C1) 
-        // + toFloat(values.CAPV_R9_C1) + toFloat(values.CAPV_R10_C1)).toFixed(1);
-
-        // v_CAPV_R5_C1 = 0;
-        // v_CAPV_R5_C1 = toFloat(values.CAPV_R5_C1).toFixed(1);
-
-        // //But here the variables are of type
-        // //v_CAPV_R5_C1 = '79' 
-        // //result03031  = '8'
-        // // Here it is checked as string but it must be number
-        // //'79' < '8'
-        // //Change the code. To be verified as numbers.
-        // //Convert to a number with a comma after zero
-        // if (v_CAPV_R5_C1 < result03031) {
-        //     webform.errors.push({
-        //         'fieldName': 'CAPV_R5_C1',
-        //         'index': 0,
-        //         'weight': 31,
-        //         'options': {
-        //             'hide_title': true
-        //         },
-        //         'msg': Drupal.t('Cod eroare: 03-031 - Cap V, Rând 5 >= Rând 6+ Rând 7+Rând 8+Rând 9 + Rând 10')
-        //     });
-        // }
-        //------------------------------------------------------------------------------
-
-
-        // Float type variables are introduced.
-        // Enter the following variables with the following numbers
-        // values.CAPV_R5_C1 = 79
-        // values.CAPV_R6_C1 = 4
-        // values.CAPV_R7_C1 = 
+        
 
         var result03031 = 0;
         result03031 = parseFloat(values.CAPV_R6_C1) || 0;
@@ -978,7 +879,7 @@
         validate_rule_03076(caem_equal_fields_static);
         //validate_rule_03109('dec_dynamicTable2_r0_c9t', 'dec_table5_row_r411c1');
         validate_rule_03110('CAPIa_R00_T_C3', 'CAPV_R3_1_1_C1');
-        validate_rule_03156(cap1a_c10_c1_static);
+     //   validate_rule_03156(cap1a_c10_c1_static);
         validate_rule_03046('CAPIa_R01_T_C1');
         validate_rule_03046('CAPII_R01_T_C1');
         validate_rule_03114(get_rule_param('03114', 'static'));
@@ -1015,8 +916,10 @@
             validate_rule_03078(valid_078_static[j]);
             //validate_rule_03001(cap1a_c1_c2_static[j]);
             validate_rule_03013(get_rule_param('03013', 'static')[j]);
+            if (j < 2) { validate_rule_03013_1(get_rule_param('03013_1', 'static')[j]); }
             //validate_rule_03014(cap2_c1_c7_static[j]);
             validate_rule_03015(cap2_5_13_percent_static[j]);
+            if (j < 2) { validate_rule_03015_1(get_rule_param('03015_1', 'static')[j]); }
             //validate_rule_03128(cap2_c1_c9_static[j]);
             validate_rule_03084(get_rule_param('03084', 'static')[j]);
             validate_rule_03084(get_rule_param('03084', 'static2')[j]);
@@ -1087,7 +990,7 @@
 
             var clonable_total = values.CAPIa_R_INDEX_FILIAL[i].length;
             for (var k = 0; k < clonable_total; k++) {
-                validate_rule_03156(cap1a_c10_c1_dynamic);
+              //  validate_rule_03156(cap1a_c10_c1_dynamic);
                 validate_rule_03124(valid_124_dynamic_row, k, i);
                 validate_rule_03082(col1a_c4_c7_dynamic_row, k, i);
                 validate_rule_03077(valid_077_dynamic_row, k, i);
@@ -1129,6 +1032,8 @@
                 validate_rule_03084(get_rule_param('03084', 'dynamic2_row')[j], i);
             }
         }
+        validate_rule_03015_1(get_rule_param('03015_1', 'dynamic_row'), i);
+        validate_rule_03013_1(get_rule_param('03013_1', 'dynamic_row'), i);
 
         var total = values.CAPII_CUATM_R_INDEX_FILIAL.length;
         for (var i = 0; i < total; i++) {
@@ -1144,8 +1049,10 @@
             for (var j = 0; j < 4; j++) {
                 //validate_rule_03128(cap2_c1_c9_dynamic[j], i);
                 validate_rule_03013(get_rule_param('03013', 'dynamic_section')[j], i);
+            if (j < 2) { validate_rule_03013_1(get_rule_param('03013_1', 'dynamic_section')[j], i); }
                 //validate_rule_03014(cap2_c1_c7_dynamic[j], i);
                 validate_rule_03015(cap2_5_13_percent_dynamic[j], i);
+                if (j < 2) { validate_rule_03015_1(get_rule_param('03015_1', 'dynamic_section')[j], i); }
             }
 
             var clonable_total = values.CAPII_R_INDEX_FILIAL[i].length;
@@ -1161,6 +1068,8 @@
                     validate_rule_03015(cap2_5_13_percent_dynamic_row[j], i);
                 }
             }
+                validate_rule_03015_1(get_rule_param('03015_1', 'dynamic_section_row'), k, i);
+            validate_rule_03013_1(get_rule_param('03013_1', 'dynamic_section_row'), k, i);
         }
 
         validate_rule_03147('CAPIa_CUATM_R_FILIAL');
@@ -1344,6 +1253,41 @@
             });
         }
     }
+    // 03-013.1  Cap II (T-F), Col.6*100/ Col.1 ∈ [8%-10%]
+    // Internal: Col.1 -> C2 ; Col.6 -> C7 ; computed on (T-F)
+    function validate_rule_03013_1(param, index, parentIndex) {
+        if (
+            field_exists(param.c1_T, index, parentIndex) && field_exists(param.c1_F, index, parentIndex) &&
+            field_exists(param.c6_T, index, parentIndex) && field_exists(param.c6_F, index, parentIndex)
+        ) {
+            var c1_T = toFloat(get_field_value(param.c1_T, index, parentIndex));
+            var c1_F = toFloat(get_field_value(param.c1_F, index, parentIndex));
+            var c6_T = toFloat(get_field_value(param.c6_T, index, parentIndex));
+            var c6_F = toFloat(get_field_value(param.c6_F, index, parentIndex));
+
+            var denom = (c1_T - c1_F);
+            var numer = (c6_T - c6_F) * 100;
+
+            if (denom) {
+                var rez = toFloat(numer / denom);
+                if (rez < 8 || rez > 10) {
+                    var msg = Drupal.t('Cap II., Rândul @row, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (@result)', {
+                        '@row': getRowFromFieldName(param.c6_T, index),
+                        '@result': formatNumber(rez, 2)
+                    });
+                    webform.warnings.push({
+                        'fieldName': param.c6_T,
+                        'index': index,
+                        'parentIndex': parentIndex,
+                        'weight': 131,
+                        'options': { 'hide_title': true },
+                        'msg': generateMessageTitle('03-013.1', msg, param.c6_T, index, parentIndex)
+                    });
+                }
+            }
+        }
+    }
+
 
     function validate_rule_03014(fieldsInfo, index, parentIndex) {
         var f1 = get_field_value(fieldsInfo.f1, index, parentIndex);
@@ -1388,51 +1332,58 @@
         }
     }
 
+
+    // 
+  
     function validate_rule_03015(fieldsInfo, index, parentIndex) {
-        var f1 = get_field_value(fieldsInfo.f1, index, parentIndex);
-        var f2 = get_field_value(fieldsInfo.f2, index, parentIndex);
-        var f3 = get_field_value(fieldsInfo.f3, index, parentIndex);
-        //var f4 = get_field_value(fieldsInfo.f4, index, parentIndex);
-        var rez = toFloat((toFloat(f1) * 100) / (toFloat(f2) - toFloat(f3)));
-        var matches = fieldsInfo.f1.match(/([T|F])+_C(\d)/);
+        var f1 = get_field_value(fieldsInfo.f1, index, parentIndex); // Col.7 (C8)
+        var f2 = get_field_value(fieldsInfo.f2, index, parentIndex); // Col.1 (C2)
+        var f3 = get_field_value(fieldsInfo.f3, index, parentIndex); // Col.6 (C7)
+
+        // F-only: dacă e Total (T), ieșim
+        var matches = fieldsInfo.f1.match(/([TF])_C(\d+)/);
+        if (matches && matches[1] === 'T') { return; }
+
+        // Determină ce câmpuri verificăm pentru "rând completat":
+        // preferăm c2/c7/c8 dacă există în fieldsInfo; altfel folosim f2/f3/f1.
+        var candidates = [];
+        if (fieldsInfo.c2) { candidates.push(fieldsInfo.c2); } else if (fieldsInfo.f2) { candidates.push(fieldsInfo.f2); }
+        if (fieldsInfo.c7) { candidates.push(fieldsInfo.c7); } else if (fieldsInfo.f3) { candidates.push(fieldsInfo.f3); }
+        if (fieldsInfo.c8) { candidates.push(fieldsInfo.c8); } else if (fieldsInfo.f1) { candidates.push(fieldsInfo.f1); }
+
         var rowIsFilled = false;
-
-        var cols = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-        if (matches) {
-            if (matches[2] == 'F') {
-                cols = [2, 7, 8];
-            }
-
-            for (var k = 0; k < cols.length; k++) {
-                var col = cols[k];
-                var field = fieldsInfo.f1.replace(matches[1] + '_C' + matches[2], matches[1] + '_C' + col);
-                var field_val = get_field_value(field, index, parentIndex);
-
-                if (field_val != '' || field_val != 'undefined') {
-                    rowIsFilled = true;
-                    break;
-                }
+        for (var i = 0; i < candidates.length; i++) {
+            var fld = candidates[i];
+            if (fld && field_exists(fld, index, parentIndex)) {
+                var v = get_field_value(fld, index, parentIndex);
+                if (v !== '' && v !== null && typeof v !== 'undefined') { rowIsFilled = true; break; }
             }
         }
 
-        if (rowIsFilled && (rez < 1 || rez > 13) || rez == 'Infinity') {
-            var msg = Drupal.t('Cap II., Rândul @row, Col7 * 100 / Rândul @row, (Col1-Col6) trebuie să fie în intervalul [1%-13%], (@result)', {
-                '@row': getRowFromFieldName(fieldsInfo.f1, index),
-                '@result': formatNumber(rez, 2)
-            });
+        // calculează doar dacă rândul e completat și denominatorul e valid
+        var denom = toFloat(f2) - toFloat(f3);
+        if (!rowIsFilled || !denom) { return; }
+
+        var rez = toFloat((toFloat(f1) * 100) / denom);
+
+        if (!isFinite(rez) || rez < 1 || rez > 13) {
+            var msg = Drupal.t(
+                'Cap II., Rândul @row, (Col.7 * 100 / (Col.1 - Col.6)) trebuie să fie în intervalul [1%-13%], (@result)',
+                { '@row': getRowFromFieldName(fieldsInfo.f1, index), '@result': formatNumber(rez, 2) }
+            );
             webform.warnings.push({
                 'fieldName': fieldsInfo.f1,
                 'index': index,
                 'parentIndex': parentIndex,
                 'weight': 15,
-                'options': {
-                    'hide_title': true
-                },
+                'options': { 'hide_title': true },
                 'msg': generateMessageTitle('03-015', msg, fieldsInfo.f1, index, parentIndex)
             });
         }
     }
 
+
+    // 
     function validate_rule_03076(fieldsInfo, index, parentIndex) {
         var values = Drupal.settings.mywebform.values;
         var msg = Drupal.t('Cap. I.a., CAEM = Cap. II., CAEM, pentru toate Rând');
@@ -1845,24 +1796,24 @@
         }
     }
 
-    function validate_rule_03156(fieldsInfo, index, parentIndex) {
-        var f1 = toFloat(get_field_value(fieldsInfo.f1, index, parentIndex));
-        var f2 = get_field_value(fieldsInfo.f2, index, parentIndex);
-        var f3 = get_field_value(fieldsInfo.f3, index, parentIndex);
-        var msg = Drupal.t('Cap. I rd.00-T Col.10 <= Col.1');
-        if (toFloat(f1) > toFloat(f2)) {
-            webform.warnings.push({
-                'fieldName': '',
-                'index': index,
-                'parentIndex': parentIndex,
-                'weight': 156,
-                'options': {
-                    'hide_title': true
-                },
-                'msg': generateMessageTitle('03-156', msg, fieldsInfo.f1, index, parentIndex)
-            });
-        }
-    }
+    // function validate_rule_03156(fieldsInfo, index, parentIndex) {
+    //     var f1 = toFloat(get_field_value(fieldsInfo.f1, index, parentIndex));
+    //     var f2 = get_field_value(fieldsInfo.f2, index, parentIndex);
+    //     var f3 = get_field_value(fieldsInfo.f3, index, parentIndex);
+    //     var msg = Drupal.t('Cap. I rd.00-T Col.10 <= Col.1');
+    //     if (toFloat(f1) > toFloat(f2)) {
+    //         webform.warnings.push({
+    //             'fieldName': '',
+    //             'index': index,
+    //             'parentIndex': parentIndex,
+    //             'weight': 156,
+    //             'options': {
+    //                 'hide_title': true
+    //             },
+    //             'msg': generateMessageTitle('03-156', msg, fieldsInfo.f1, index, parentIndex)
+    //         });
+    //     }
+    // }
 
     function validate_rule_03138(fieldsInfo, index, parentIndex) {
         var t1 = toFloat(get_field_value(fieldsInfo.t1, index, parentIndex));
@@ -1988,42 +1939,60 @@
         }
     }
 
+//------------------------------------------------------------------
+
     function validate_rule_03084(param, index) {
+        // Selectăm coloanele în funcție de capitol
         var cols;
         if (param.table == 'II.') {
             cols = param.cols || [2, 3, 4, 5, 6, 7, 8];
-        }
-        else {
+        } else {
             cols = param.cols || [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
         }
 
         for (var i = 0; i < cols.length; i++) {
             var col = cols[i];
-            var result_field = param.result_field.replace('_COL_', col);
-            var field = param.field.replace('_COL_', col);
-            var total = get_field_value(result_field, index);
-            var result = validation_rule_03084_get_result(field, index, param);
-            var msg = Drupal.t('Valoarea din @table (tab. de bază), Rândul @row, Col.@col, trebuie să fie egală cu suma valorilor similare pentru fiecare activitate (pe tabelele adaugătoare), (@result).', {
-                '@table': param.table,
-                '@row': getRowFromFieldName(param.result_field, index),
-                '@col': col - 1,
-                '@result': formatNumber(result.result, 2)
-            });
 
-            if (result.exists && formatNumber(total, 1) != formatNumber(result.result, 1) || result.diferent_caem) {
+            // Câmpul din tabelul de bază (rezultatul afișat în raport)
+            var result_field = param.result_field.replace('_COL_', col);
+
+            // Câmpul corespunzător din tabelele adăugătoare (filiale)
+            var field = param.field.replace('_COL_', col);
+
+            // Valoarea curentă din tabelul de bază
+            var baseTotal = get_field_value(result_field, index);
+
+            // Suma din tabelele adăugătoare
+            var sumInfo = validation_rule_03084_get_result(field, index, param);
+
+            // Mesaj cu AFIȘAREA ambelor valori: baza și suma din filiale
+            var msg = Drupal.t(
+                'Valoarea din @table (tab. de bază), Rândul @row, Col.@col, trebuie să fie egală cu suma valorilor similare pentru fiecare activitate (pe tabelele adăugătoare), (Bază: @base ; Sumă: @result).',
+                {
+                    '@table': param.table,
+                    '@row': getRowFromFieldName(param.result_field, index),
+                    '@col': col - 1,
+                    '@base': formatNumber(baseTotal, 2),
+                    '@result': formatNumber(sumInfo.result, 2)
+                }
+            );
+
+            // Comparație numerică la 1 zecimală + semnalăm CAEM diferit
+            var notEqualAt1dp = (formatNumber(baseTotal, 1) != formatNumber(sumInfo.result, 1));
+
+            if ((sumInfo.exists && notEqualAt1dp) || sumInfo.diferent_caem) {
                 webform.errors.push({
                     'fieldName': result_field,
                     'index': index,
                     'weight': 84,
-                    'options': {
-                        'hide_title': true
-                    },
-                    'msg': generateMessageTitle('03-084', msg, result_field, index),
+                    'options': { 'hide_title': true },
+                    'msg': generateMessageTitle('03-084', msg, result_field, index)
                 });
             }
         }
     }
 
+//-------------------------------------------------------------------
     function validation_rule_03084_get_result(field, index, param) {
         var result = {
             'exists': false,
@@ -2064,14 +2033,14 @@
             var t1_val = toFloat(get_field_value(param.t1, index, parentIndex));
             var t2_val = toFloat(get_field_value(param.t2, index, parentIndex));
             var result = (t2_val * 1000 / t1_val) / 12;
-            var msg = Drupal.t('Cap. II., Rândul @row, col. 1F * 1000 / Cap. I., Rândul @row, Col.2F / 12 => 5000 < 20000, pentru fiecare rând Femei, (@result)', {
+            var msg = Drupal.t('Cap. II., Rândul @row, col. 1F * 1000 / Cap. I., Rândul @row, Col.2F / 12 => 5500 < 20000, pentru fiecare rând Femei, (@result)', {
                 '@row': getRowFromFieldName(param.t1, index),
                 '@result': formatNumber(result, 2)
             });
 
             var report_year = String(Drupal.settings.mywebform.values.dec_fiscCod1_datefisc).split('/');
             report_year = report_year.length == 2 && report_year[1] ? Number(report_year[1]) : new Date().getFullYear() - 1;
-            var mutable_value = report_year >= 2021 ? 5000 : 2000;
+            var mutable_value = report_year >= 2021 ? 5500 : 2000;
 
             if (result < mutable_value || result >= 20000) {
                 webform.warnings.push({
@@ -2167,7 +2136,7 @@
             var t2_T = get_field_value(param.t2_T, index, parentIndex);
             var t2_F = get_field_value(param.t2_F, index, parentIndex);
             var result = (t2_T - t2_F) * 1000 / (t1_T - t1_F) / 12;
-            var msg = Drupal.t('Cap. II., Rândul @row, col. 1 (T-F) * 1000 / Cap. I., Rândul @row, Col. 2 (T-F) / 12 => 5000 < 20000 pt fiecare rînd (@result)', {
+            var msg = Drupal.t('Cap. II., Rândul @row, col. 1 (T-F) * 1000 / Cap. I., Rândul @row, Col. 2 (T-F) / 12 => 5500 < 20000 pt fiecare rînd (@result)', {
                 '@row': getRowFromFieldName(param.t1_T, index),
                 '@result': formatNumber(result, 2)
             });
@@ -2175,7 +2144,7 @@
             var report_year = String(Drupal.settings.mywebform.values.YEAR).split('/');
             report_year = report_year.length == 2 && report_year[1] ? Number(report_year[1]) : new Date().getFullYear() - 1;
             //var mutable_value = report_year >= 2020 ? 2000 : 1100;
-            var mutable_value = 5000;
+            var mutable_value = 5500;
 
             if (result < mutable_value || result >= 20000) {
                 webform.warnings.push({
@@ -2638,7 +2607,37 @@
                     ]
                 };
                 break;
-            case '03137':
+            
+            case '03013_1':
+                param = {
+                    'static': [
+                        { 'c1_T': 'CAPII_R00_T_C2', 'c1_F': 'CAPII_R00_F_C2', 'c6_T': 'CAPII_R00_T_C7', 'c6_F': 'CAPII_R00_F_C7' },
+                        { 'c1_T': 'CAPII_R01_T_C2', 'c1_F': 'CAPII_R01_F_C2', 'c6_T': 'CAPII_R01_T_C7', 'c6_F': 'CAPII_R01_F_C7' }
+                    ],
+                    'dynamic_row': { 'c1_T': 'CAPII_R_T_C2', 'c1_F': 'CAPII_R_F_C2', 'c6_T': 'CAPII_R_T_C7', 'c6_F': 'CAPII_R_F_C7' },
+                    'dynamic_section': [
+                        { 'c1_T': 'CAPII_R00_T_C2_FILIAL', 'c1_F': 'CAPII_R00_F_C2_FILIAL', 'c6_T': 'CAPII_R00_T_C7_FILIAL', 'c6_F': 'CAPII_R00_F_C7_FILIAL' },
+                        { 'c1_T': 'CAPII_R01_T_C2_FILIAL', 'c1_F': 'CAPII_R01_F_C2_FILIAL', 'c6_T': 'CAPII_R01_T_C7_FILIAL', 'c6_F': 'CAPII_R01_F_C7_FILIAL' }
+                    ],
+                    'dynamic_section_row': { 'c1_T': 'CAPII_R_T_C2_FILIAL', 'c1_F': 'CAPII_R_F_C2_FILIAL', 'c6_T': 'CAPII_R_T_C7_FILIAL', 'c6_F': 'CAPII_R_F_C7_FILIAL' }
+                };
+                break;
+
+            case '03015_1':
+                param = {
+                    'static': [
+                        { 'c1_T': 'CAPII_R00_T_C2', 'c1_F': 'CAPII_R00_F_C2', 'c6_T': 'CAPII_R00_T_C7', 'c6_F': 'CAPII_R00_F_C7', 'c7_T': 'CAPII_R00_T_C8', 'c7_F': 'CAPII_R00_F_C8' },
+                        { 'c1_T': 'CAPII_R01_T_C2', 'c1_F': 'CAPII_R01_F_C2', 'c6_T': 'CAPII_R01_T_C7', 'c6_F': 'CAPII_R01_F_C7', 'c7_T': 'CAPII_R01_T_C8', 'c7_F': 'CAPII_R01_F_C8' }
+                    ],
+                    'dynamic_row': { 'c1_T': 'CAPII_R_T_C2', 'c1_F': 'CAPII_R_F_C2', 'c6_T': 'CAPII_R_T_C7', 'c6_F': 'CAPII_R_F_C7', 'c7_T': 'CAPII_R_T_C8', 'c7_F': 'CAPII_R_F_C8' },
+                    'dynamic_section': [
+                        { 'c1_T': 'CAPII_R00_T_C2_FILIAL', 'c1_F': 'CAPII_R00_F_C2_FILIAL', 'c6_T': 'CAPII_R00_T_C7_FILIAL', 'c6_F': 'CAPII_R00_F_C7_FILIAL', 'c7_T': 'CAPII_R00_T_C8_FILIAL', 'c7_F': 'CAPII_R00_F_C8_FILIAL' },
+                        { 'c1_T': 'CAPII_R01_T_C2_FILIAL', 'c1_F': 'CAPII_R01_F_C2_FILIAL', 'c6_T': 'CAPII_R01_T_C7_FILIAL', 'c6_F': 'CAPII_R01_F_C7_FILIAL', 'c7_T': 'CAPII_R01_T_C8_FILIAL', 'c7_F': 'CAPII_R01_F_C8_FILIAL' }
+                    ],
+                    'dynamic_section_row': { 'c1_T': 'CAPII_R_T_C2_FILIAL', 'c1_F': 'CAPII_R_F_C2_FILIAL', 'c6_T': 'CAPII_R_T_C7_FILIAL', 'c6_F': 'CAPII_R_F_C7_FILIAL', 'c7_T': 'CAPII_R_T_C8_FILIAL', 'c7_F': 'CAPII_R_F_C8_FILIAL' }
+                };
+                break;
+case '03137':
                 param = {
                     'static': [
                         { 'fieldTemplate': 'CAPIa_R00__TYPE__C_COL_', 'cols': [2, 3, 7, 8], 'table': 'I.' },
@@ -2927,6 +2926,42 @@
 
         return static_form_version;
     }
+    // 03-015.1  Cap II (T-F), Col.7*100 / (Col.1 - Col.6) ∈ [1%-13%]  — warning
+    // Internal mapping: Col.1 -> C2 ; Col.6 -> C7 ; Col.7 -> C8 ; computed on (T-F)
+    function validate_rule_03015_1(param, index, parentIndex) {
+        if (
+            field_exists(param.c1_T, index, parentIndex) && field_exists(param.c1_F, index, parentIndex) &&
+            field_exists(param.c6_T, index, parentIndex) && field_exists(param.c6_F, index, parentIndex) &&
+            field_exists(param.c7_T, index, parentIndex) && field_exists(param.c7_F, index, parentIndex)
+        ) {
+            var c1_T = toFloat(get_field_value(param.c1_T, index, parentIndex)); // C2 (Col.1)
+            var c1_F = toFloat(get_field_value(param.c1_F, index, parentIndex));
+            var c6_T = toFloat(get_field_value(param.c6_T, index, parentIndex)); // C7 (Col.6)
+            var c6_F = toFloat(get_field_value(param.c6_F, index, parentIndex));
+            var c7_T = toFloat(get_field_value(param.c7_T, index, parentIndex)); // C8 (Col.7)
+            var c7_F = toFloat(get_field_value(param.c7_F, index, parentIndex));
 
+            var numer = (c7_T - c7_F) * 100;
+            var denom = (c1_T - c1_F) - (c6_T - c6_F);
+
+            if (denom) {
+                var rez = toFloat(numer / denom);
+                if (rez < 1 || rez > 13) {
+                    var msg = Drupal.t('Cap II., Rândul @row, (Col.7 (T-F) * 100 / (Col.1 (T-F) - Col.6 (T-F))) trebuie să fie în intervalul [1%-13%], (@result)', {
+                        '@row': getRowFromFieldName(param.c7_T, index),
+                        '@result': formatNumber(rez, 2)
+                    });
+                    webform.warnings.push({
+                        'fieldName': param.c7_T,
+                        'index': index,
+                        'parentIndex': parentIndex,
+                        'weight': 151,
+                        'options': { 'hide_title': true },
+                        'msg': generateMessageTitle('03-015.1', msg, param.c7_T, index, parentIndex)
+                    });
+                }
+            }
+        }
+    }
 })(jQuery);
 ;
