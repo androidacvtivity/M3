@@ -1341,6 +1341,47 @@
 
     //--------------------------------------------------------------------------
 
+    // Verifica din nou deja aceasta functie  03-015.1 
+    // 03-015.1  Cap II (T-F), Col.7*100 / (Col.1 - Col.6) ∈ [1%-13%]  — warning
+    // Internal mapping: Col.1 -> C2 ; Col.6 -> C7 ; Col.7 -> C8 ; computed on (T-F)
+    function validate_rule_03015_1(param, index, parentIndex) {
+        if (
+            field_exists(param.c1_T, index, parentIndex) && field_exists(param.c1_F, index, parentIndex) &&
+            field_exists(param.c6_T, index, parentIndex) && field_exists(param.c6_F, index, parentIndex) &&
+            field_exists(param.c7_T, index, parentIndex) && field_exists(param.c7_F, index, parentIndex)
+        ) {
+            var c1_T = toFloat(get_field_value(param.c1_T, index, parentIndex)); // C2 (Col.1)
+            var c1_F = toFloat(get_field_value(param.c1_F, index, parentIndex));
+            var c6_T = toFloat(get_field_value(param.c6_T, index, parentIndex)); // C7 (Col.6)
+            var c6_F = toFloat(get_field_value(param.c6_F, index, parentIndex));
+            var c7_T = toFloat(get_field_value(param.c7_T, index, parentIndex)); // C8 (Col.7)
+            var c7_F = toFloat(get_field_value(param.c7_F, index, parentIndex));
+
+            var numer = (c7_T - c7_F) * 100;
+            var denom = (c1_T - c1_F) - (c6_T - c6_F);
+
+            if (denom) {
+                var rez = toFloat(numer / denom);
+                if (rez < 1 || rez > 13) {
+                    var msg = Drupal.t('Cap II., Rândul @row, (Col.7 (T-F) * 100 / (Col.1 (T-F) - Col.6 (T-F))) trebuie să fie în intervalul [1%-13%], (@result)', {
+                        '@row': getRowFromFieldName(param.c7_T, index),
+                        '@result': formatNumber(rez, 2)
+                    });
+                    webform.warnings.push({
+                        'fieldName': param.c7_T,
+                        'index': index,
+                        'parentIndex': parentIndex,
+                        'weight': 151,
+                        'options': { 'hide_title': true },
+                        'msg': generateMessageTitle('03-015.1', msg, param.c7_T, index, parentIndex)
+                    });
+                }
+            }
+        }
+    }
+
+    //-------------------------------------------------------------------------
+
 
     // înlocuiește funcția validate_rule_03114 cu această versiune robustă
     function validate_rule_03114(param, index, parentIndex) {
@@ -3006,42 +3047,8 @@ case '03137':
 
         return static_form_version;
     }
-    // 03-015.1  Cap II (T-F), Col.7*100 / (Col.1 - Col.6) ∈ [1%-13%]  — warning
-    // Internal mapping: Col.1 -> C2 ; Col.6 -> C7 ; Col.7 -> C8 ; computed on (T-F)
-    function validate_rule_03015_1(param, index, parentIndex) {
-        if (
-            field_exists(param.c1_T, index, parentIndex) && field_exists(param.c1_F, index, parentIndex) &&
-            field_exists(param.c6_T, index, parentIndex) && field_exists(param.c6_F, index, parentIndex) &&
-            field_exists(param.c7_T, index, parentIndex) && field_exists(param.c7_F, index, parentIndex)
-        ) {
-            var c1_T = toFloat(get_field_value(param.c1_T, index, parentIndex)); // C2 (Col.1)
-            var c1_F = toFloat(get_field_value(param.c1_F, index, parentIndex));
-            var c6_T = toFloat(get_field_value(param.c6_T, index, parentIndex)); // C7 (Col.6)
-            var c6_F = toFloat(get_field_value(param.c6_F, index, parentIndex));
-            var c7_T = toFloat(get_field_value(param.c7_T, index, parentIndex)); // C8 (Col.7)
-            var c7_F = toFloat(get_field_value(param.c7_F, index, parentIndex));
 
-            var numer = (c7_T - c7_F) * 100;
-            var denom = (c1_T - c1_F) - (c6_T - c6_F);
-
-            if (denom) {
-                var rez = toFloat(numer / denom);
-                if (rez < 1 || rez > 13) {
-                    var msg = Drupal.t('Cap II., Rândul @row, (Col.7 (T-F) * 100 / (Col.1 (T-F) - Col.6 (T-F))) trebuie să fie în intervalul [1%-13%], (@result)', {
-                        '@row': getRowFromFieldName(param.c7_T, index),
-                        '@result': formatNumber(rez, 2)
-                    });
-                    webform.warnings.push({
-                        'fieldName': param.c7_T,
-                        'index': index,
-                        'parentIndex': parentIndex,
-                        'weight': 151,
-                        'options': { 'hide_title': true },
-                        'msg': generateMessageTitle('03-015.1', msg, param.c7_T, index, parentIndex)
-                    });
-                }
-            }
-        }
-    }
+     
+ 
 })(jQuery);
 ;
