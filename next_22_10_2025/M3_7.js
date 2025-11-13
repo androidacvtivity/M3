@@ -1262,96 +1262,81 @@
 
 
     //-------------------------------------------------------------------------
-    //Uncaught TypeError: can't access property 2, value is undefined
-    //Again there is an error.
-   // Search in the file where validations are made on dynamic rows - and follow the example
-    // 03-013.1  Cap II (T-F), Col.6*100 / Col.1 ∈ [8%-10%]
-    // Covers R00, R01, and ALL dynamic rows R-n without using jQuery/Sizzle.
-    // It relies primarily on Drupal.settings.mywebform.values to enumerate dynamic rows.
+    // înlocuiește ÎNTREAGA funcție validate_rule_03013_1 cu aceasta
     function validate_rule_03013_1(param, index, parentIndex) {
         if (!param) return;
 
-        // ----- Safe primitives -----
         function toNum(v) { var f = parseFloat(v); return isNaN(f) ? 0 : f; }
-        function hasEl(id) { return (typeof id === 'string' && id && document.getElementById(id)); }
-        function gv(id) { return hasEl(id) ? get_field_value(id, index, parentIndex) : ''; }
-        function hasAny(ids) {
-            for (var i = 0; i < ids.length; i++) {
-                var id = ids[i];
-                if (hasEl(id)) {
-                    var val = gv(id);
-                    if (val !== '' && typeof val !== 'undefined') return true;
+        function safeVal(field, i, p, def) {
+            if (field_exists(field, i, p)) {
+                return get_field_value(field, i, p);
+            }
+            return (typeof def !== 'undefined') ? def : '';
+        }
+        function rowFilled(fields, i, p) {
+            for (var k = 0; k < fields.length; k++) {
+                if (field_exists(fields[k], i, p)) {
+                    var v = get_field_value(fields[k], i, p);
+                    if (v !== '' && v !== null && typeof v !== 'undefined') return true;
                 }
             }
             return false;
         }
-        function validateOne(c1T, c1F, c6T, c6F, anchor) {
-            if (!hasAny([c1T, c1F, c6T, c6F])) return;
-            var denom = toNum(gv(c1T)) - toNum(gv(c1F));          // Col.1 (T-F)
-            if (!isFinite(denom) || denom === 0) return;          // avoid /0
-            var numer = (toNum(gv(c6T)) - toNum(gv(c6F))) * 100;  // Col.6 (T-F) * 100
-            var rez = toFloat(numer / denom);
-            if (rez < 8 || rez > 10) {
-                var fld = anchor || c6T || c6F || c1T || c1F || '';
-                var msg = Drupal.t(
-                    'Cap II., Rândul @row, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (@result)',
-                    { '@row': getRowFromFieldName(fld, index), '@result': formatNumber(rez, 2) }
-                );
-                webform.warnings.push({
-                    'fieldName': fld,
-                    'index': index,
-                    'parentIndex': parentIndex,
-                    'weight': 131,
-                    'options': { 'hide_title': true },
-                    'msg': generateMessageTitle('03-013.1', msg, fld, index, parentIndex)
-                });
-            }
+        function pushWarn(anchorField, r, p, rez) {
+            var msg = Drupal.t(
+                'Cap II., Rândul @row, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (@result)',
+                { '@row': getRowFromFieldName(anchorField, r), '@result': formatNumber(rez, 2) }
+            );
+            webform.warnings.push({
+                'fieldName': anchorField,
+                'index': r,
+                'parentIndex': p,
+                'weight': 131,
+                'options': { 'hide_title': true },
+                'msg': generateMessageTitle('03-013.1', msg, anchorField, r, p)
+            });
         }
 
-        // 1) STATIC rows: R00/R01 (no numeric suffix). Keep your current mappings.
-        validateOne(param.c1_T, param.c1_F, param.c6_T, param.c6_F, param.c6_T);
-
-        // 2) DYNAMIC rows (R-n). Build ids by suffix using settings first, DOM fallback second.
-        var baseT_C1 = (typeof param.c1_T === 'string' && param.c1_T) ? param.c1_T : 'CAPII_R_T_C1';
-        var baseF_C1 = (typeof param.c1_F === 'string' && param.c1_F) ? param.c1_F : 'CAPII_R_F_C1';
-        var baseT_C6 = (typeof param.c6_T === 'string' && param.c6_T) ? param.c6_T : 'CAPII_R_T_C6';
-        var baseF_C6 = (typeof param.c6_F === 'string' && param.c6_F) ? param.c6_F : 'CAPII_R_F_C6';
-
-        // Prefer source of truth from Drupal settings (no regex/selector pitfalls)
-        var values = (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values) || {};
-        var dynCount = 0;
-
-        // If values like values.CAPII_R_T_C1 = [ .. ] exist, use their length.
-        if (Array.isArray(values.CAPII_R_T_C1)) {
-            dynCount = values.CAPII_R_T_C1.length; // 1..N rows expected
-        } else {
-            // DOM fallback: very defensive scan without jQuery
-            // Collect ids starting with baseT_C1 + "-"
-            var nodeList = document.querySelectorAll('[id]');
-            for (var i = 0; i < nodeList.length; i++) {
-                var id = nodeList[i].id;
-                if (typeof id === 'string' && id.indexOf(baseT_C1 + '-') === 0) {
-                    // extract suffix: "-<n>"
-                    var suffix = id.substring(baseT_C1.length); // e.g., "-2"
-                    var n = parseInt(suffix.replace('-', ''), 10);
-                    if (isFinite(n) && n > dynCount) dynCount = n; // track max
+        // 1) STATIC (R00/R01) – doar dacă există câmpurile
+        if (field_exists(param.c1_T, index, parentIndex) && field_exists(param.c1_F, index, parentIndex)) {
+            var denomS = toNum(safeVal(param.c1_T, index, parentIndex, 0)) - toNum(safeVal(param.c1_F, index, parentIndex, 0));
+            if (denomS) {
+                var numerS = (toNum(safeVal(param.c6_T, index, parentIndex, 0)) - toNum(safeVal(param.c6_F, index, parentIndex, 0))) * 100;
+                var rezS = toFloat(numerS / denomS);
+                if (rezS < 8 || rezS > 10) {
+                    // ancorăm mesajul pe col.6 (Total) dacă există, altfel pe alternative
+                    var anchor = field_exists(param.c6_T, index, parentIndex) ? param.c6_T
+                        : (field_exists(param.c6_F, index, parentIndex) ? param.c6_F
+                            : (field_exists(param.c1_T, index, parentIndex) ? param.c1_T : param.c1_F));
+                    pushWarn(anchor, index, parentIndex, rezS);
                 }
             }
         }
 
-        // Iterate dynamic row indices 1..dynCount and validate each
-        for (var r = 1; r <= dynCount; r++) {
-            var suf = '-' + r;
-            var idT_C1 = baseT_C1 + suf;
-            var idF_C1 = baseF_C1 + suf;
-            var idT_C6 = baseT_C6 + suf;
-            var idF_C6 = baseF_C6 + suf;
-            // Only attempt rows that actually exist in DOM
-            if (hasEl(idT_C1) || hasEl(idF_C1) || hasEl(idT_C6) || hasEl(idF_C6)) {
-                validateOne(idT_C1, idF_C1, idT_C6, idF_C6, idT_C6); //Uncaught TypeError: can't access property 2, value is undefined
+        // 2) DINAMIC (R-n) – fără acces direct la [r] dacă vectorul lipsește
+        var values = (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values) || {};
+        var baseArr = values.CAPII_R_T_C1;
+        var dynCount = Array.isArray(baseArr) ? baseArr.length : 0;
+
+        for (var r = 0; r < dynCount; r++) {
+            // validează rândul doar dacă are ceva completat în Col.1 sau Col.6 (T/F)
+            if (!rowFilled([param.c1_T, param.c1_F, param.c6_T, param.c6_F], r, parentIndex)) continue;
+
+            var denomR = toNum(safeVal(param.c1_T, r, parentIndex, 0)) - toNum(safeVal(param.c1_F, r, parentIndex, 0));
+            if (!denomR) continue;
+
+            // Col.6 intern = C7
+            var numerR = (toNum(safeVal(param.c6_T, r, parentIndex, 0)) - toNum(safeVal(param.c6_F, r, parentIndex, 0))) * 100;
+
+            var rezR = toFloat(numerR / denomR);
+            if (rezR < 8 || rezR > 10) {
+                // ancorează pe C6 (Total) din rândul curent
+                var anchorDyn = field_exists(param.c6_T, r, parentIndex) ? param.c6_T : param.c1_T;
+                pushWarn(anchorDyn, r, parentIndex, rezR);
             }
         }
     }
+
 
 
     //--------------------------------------------------------------------------
