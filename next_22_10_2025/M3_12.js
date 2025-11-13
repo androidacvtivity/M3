@@ -2029,7 +2029,7 @@
         var val = get_field_value(field, index, parentIndex);
         var rowIsFilled = false;
 
-        for (var i = 2; i <= 11; i++) {
+        for (var i = 2; i <= 10; i++) {
             var fieldNameT = field.replace('_C1', '_C' + i);
             var fieldNameF = field.replace('_T_C1', '_F_' + 'C' + i);
             var f_val = '';
@@ -2365,7 +2365,7 @@
                 '@result': formatNumber(result, 2)
             });
 
-            if (result >= 90 && result <= 110) {
+            if (result >= 90 && result <= 10) {
                 var titleParts = generateTitleFromField(param.t1_T, index, parentIndex);
                 var fieldTitle = titleParts.table + ', ' + Drupal.t('Rândurile "Total salariați" (T) și "Femei" (F)') + ', ' + titleParts.col;
 
@@ -2383,30 +2383,8 @@
         }
     }
 
-    //     Ok.I have same error in this function. 
-    // Fix  this. 
-    // function validate_rule_03114(param, index) {
-    //     var f1 = param.fieldTemplate.replace('_COL_', 2);
-    //     var f1_val = get_field_value(f1, index);
 
-    //     for (var i = 7; i <= 8; i++) {
-    //         var msg = Drupal.t('Cap.II., Rândul 00-T, col. 1 > Cap.II., Rândul 00-T, col. @col', { '@col': i - 1 });
-    //         var f2 = param.fieldTemplate.replace('_COL_', i);
-    //         var f2_val = get_field_value(f2, index);
-
-    //         if (f2_val !== '' && toFloat(f1_val) <= toFloat(f2_val)) {
-    //             webform.errors.push({
-    //                 'fieldName': f1,
-    //                 'index': 0,
-    //                 'weight': 114,
-    //                 'options': {
-    //                     'hide_title': true
-    //                 },
-    //                 'msg': generateMessageTitle('03-114', msg, f1, index),
-    //             });
-    //         }
-    //     }
-    // }
+    
 
     function validate_rule_03114(param, index) {
         var f1 = param.fieldTemplate.replace('_COL_', 2);
@@ -2500,7 +2478,7 @@
         var rowIsFilled = false;
 
         if (param.table == 'I.') {
-            for (var i = 2; i <= 11; i++) {
+            for (var i = 2; i <= 10; i++) {
                 var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
                 var val_T = get_field_value(field_T, index, parentIndex);
 
