@@ -1342,50 +1342,42 @@
     //--------------------------------------------------------------------------
 
 
-    function validate_rule_03014(fieldsInfo, index, parentIndex) {
-        var f1 = get_field_value(fieldsInfo.f1, index, parentIndex);
-        var f2 = get_field_value(fieldsInfo.f2, index, parentIndex);
-        var rez = toFloat((toFloat(f2) * 100) / toFloat(f1));
-        var matches = fieldsInfo.f1.match(/([T|F])+_C(\d)/);
-        var rowIsFilled = false;
+    // înlocuiește funcția validate_rule_03114 cu această versiune robustă
+    function validate_rule_03114(param, index, parentIndex) {
+        var f1 = param.fieldTemplate.replace('_COL_', 2); // Col.1 intern = C2
+        // dacă lipsește rândul/câmpul, ieșim liniștiți
+        if (!field_exists(f1, index, parentIndex)) return;
 
-        var cols = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-        if (matches) {
-            if (matches[2] == 'f') {
-                cols = [2, 7, 8];
+        var f1_raw = get_field_value(f1, index, parentIndex);
+        var f1_val = toFloat(f1_raw);
+
+        for (var i = 7; i <= 8; i++) { // Col.6-7 intern = C7..C8
+            var f2 = param.fieldTemplate.replace('_COL_', i);
+            if (!field_exists(f2, index, parentIndex)) continue;
+
+            var f2_raw = get_field_value(f2, index, parentIndex);
+            // verificăm explicit “completat” ca șir ne-gol — exact ca în restul fișierului
+            var f2_has = (f2_raw !== '' && typeof f2_raw !== 'undefined' && f2_raw !== null);
+            if (!f2_has) continue;
+
+            var f2_val = toFloat(f2_raw);
+
+            var msg = Drupal.t('Cap.II., Rândul 00-T, col. 1 > Cap.II., Rândul 00-T, col. @col', { '@col': i - 1 });
+            if (isFinite(f1_val) && isFinite(f2_val) && f1_val <= f2_val) {
+                webform.errors.push({
+                    'fieldName': f1,
+                    'index': index || 0,
+                    'parentIndex': parentIndex,
+                    'weight': 114,
+                    'options': { 'hide_title': true },
+                    'msg': generateMessageTitle('03-114', msg, f1, index, parentIndex),
+                });
             }
-
-            for (var k = 0; k < cols.length; k++) {
-                var col = cols[k];
-                var field = fieldsInfo.f1.replace(matches[1] + '_C' + matches[2], matches[1] + '_C' + col);
-                var field_val = get_field_value(field, index, parentIndex);
-
-                if (field_val != '') {
-                    rowIsFilled = true;
-                    break;
-                }
-            }
-        }
-
-        if (rowIsFilled && (rez < 4 || rez > 5)) {
-            var msg = Drupal.t('Cap II., Rândul @row, Col7 * 100/ Rândul @row, Col1 trebuie să fie în intervalul [4%-5%], (@result)', {
-                '@row': getRowFromFieldName(fieldsInfo.f2, index),
-                '@result': formatNumber(rez, 2)
-            });
-            webform.warnings.push({
-                'fieldName': fieldsInfo.f2,
-                'index': index,
-                'parentIndex': parentIndex,
-                'weight': 14,
-                'options': {
-                    'hide_title': true
-                },
-                'msg': generateMessageTitle('03-014', msg, fieldsInfo.f2, index, parentIndex)
-            });
         }
     }
 
 
+    //----------------------------------------------------------------------
     // 
   
     function validate_rule_03015(fieldsInfo, index, parentIndex) {
