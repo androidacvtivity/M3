@@ -2133,6 +2133,10 @@
         }
         //}
     }
+// Analizeaza validarea de ce afiseaza - Infinity (@result)
+//Cod eroare: 03-127, Cap. I., Rândul "Total salariați", Col.2 - Cap. II., Rândul 0, col. 1 (T-F) * 1000 / Cap. I., Rândul 0, Col. 2 (T-F) / 12 => 5500 < 20000 pt fiecare rînd (Infinity)
+//Cod eroare: 03 - 127, Cap.I., Rândul "Total salariați", Col.2 - Cap.II., Rândul 1, col. 1(T - F) * 1000 / Cap.I., Rândul 1, Col. 2(T - F) / 12 => 5500 < 20000 pt fiecare rînd(Infinity)
+//La modificarea validarii modifica in stilul in  care este scris.  
 
     function validate_rule_03127(param, index, parentIndex) {
         if (field_exists(param.t1_T, index, parentIndex) && field_exists(param.t2_T, index, parentIndex)) {
