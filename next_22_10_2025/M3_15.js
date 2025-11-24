@@ -2038,7 +2038,7 @@
         var val = get_field_value(field, index, parentIndex);
         var rowIsFilled = false;
 
-        for (var i = 2; i <= 10; i++) {
+        for (var i = 2; i <= 9; i++) {
             var fieldNameT = field.replace('_C1', '_C' + i);
             var fieldNameF = field.replace('_T_C1', '_F_' + 'C' + i);
             var f_val = '';
@@ -2487,7 +2487,7 @@
         var rowIsFilled = false;
 
         if (param.table == 'I.') {
-            for (var i = 2; i <= 10; i++) {
+            for (var i = 2; i <= 9; i++) {
                 var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
                 var val_T = get_field_value(field_T, index, parentIndex);
 

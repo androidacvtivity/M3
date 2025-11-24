@@ -1,13 +1,85 @@
-Ok. Now I have this 
+//Eroarea 03-013.1 apare acum eronat de două ori, pentru rândurile 0 și 1:
 
-Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (7.00)
-Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 1, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (7.00)
 
-But it must be still  
+// Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (0.88)
+// Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (-200.00)
+// Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (-200.00)
+// Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 1, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (7.00)
+// Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 1, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (57.14)
+// Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 2, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (0.32)
+// Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 3, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (7.00)
 
-Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 2, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (7.00)
-Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 3, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (7.00)
 
-what are dynamic rows
+function validate_rule_03013_1(param, index, parentIndex) {
+    if (!param) return;
 
-CL_LANG
+    function toNum(v) { var f = parseFloat(v); return isNaN(f) ? 0 : f; }
+    function safeVal(field, i, p, def) {
+        if (field_exists(field, i, p)) {
+            return get_field_value(field, i, p);
+        }
+        return (typeof def !== 'undefined') ? def : '';
+    }
+    function rowFilled(fields, i, p) {
+        for (var k = 0; k < fields.length; k++) {
+            if (field_exists(fields[k], i, p)) {
+                var v = get_field_value(fields[k], i, p);
+                if (v !== '' && v !== null && typeof v !== 'undefined') return true;
+            }
+        }
+        return false;
+    }
+    function pushWarn(anchorField, r, p, rez) {
+        var msg = Drupal.t(
+            'Cap II., Rândul @row, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (@result)',
+            { '@row': getRowFromFieldName(anchorField, r), '@result': formatNumber(rez, 2) }
+        );
+        webform.warnings.push({
+            'fieldName': anchorField,
+            'index': r,
+            'parentIndex': p,
+            'weight': 131,
+            'options': { 'hide_title': true },
+            'msg': generateMessageTitle('03-013.1', msg, anchorField, r, p)
+        });
+    }
+
+    // 1) STATIC (R00/R01) – doar dacă există câmpurile
+    if (field_exists(param.c1_T, index, parentIndex) && field_exists(param.c1_F, index, parentIndex)) {
+        var denomS = toNum(safeVal(param.c1_T, index, parentIndex, 0)) - toNum(safeVal(param.c1_F, index, parentIndex, 0));
+        if (denomS) {
+            var numerS = (toNum(safeVal(param.c6_T, index, parentIndex, 0)) - toNum(safeVal(param.c6_F, index, parentIndex, 0))) * 100;
+            var rezS = toFloat(numerS / denomS);
+            if (rezS < 8 || rezS > 10) {
+                // ancorăm mesajul pe col.6 (Total) dacă există, altfel pe alternative
+                var anchor = field_exists(param.c6_T, index, parentIndex) ? param.c6_T
+                    : (field_exists(param.c6_F, index, parentIndex) ? param.c6_F
+                        : (field_exists(param.c1_T, index, parentIndex) ? param.c1_T : param.c1_F));
+                pushWarn(anchor, index, parentIndex, rezS);
+            }
+        }
+    }
+
+    // 2) DINAMIC (R-n) – fără acces direct la [r] dacă vectorul lipsește
+    var values = (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values) || {};
+    var baseArr = values.CAPII_R_T_C1;
+    var dynCount = Array.isArray(baseArr) ? baseArr.length : 0;
+
+    for (var r = 0; r < dynCount; r++) {
+        // validează rândul doar dacă are ceva completat în Col.1 sau Col.6 (T/F)
+        if (!rowFilled([param.c1_T, param.c1_F, param.c6_T, param.c6_F], r, parentIndex)) continue;
+
+        var denomR = toNum(safeVal(param.c1_T, r, parentIndex, 0)) - toNum(safeVal(param.c1_F, r, parentIndex, 0));
+        if (!denomR) continue;
+
+        // Col.6 intern = C7
+        var numerR = (toNum(safeVal(param.c6_T, r, parentIndex, 0)) - toNum(safeVal(param.c6_F, r, parentIndex, 0))) * 100;
+
+        var rezR = toFloat(numerR / denomR);
+        if (rezR < 8 || rezR > 10) {
+            // ancorează pe C6 (Total) din rândul curent
+            var anchorDyn = field_exists(param.c6_T, r, parentIndex) ? param.c6_T : param.c1_T;
+            pushWarn(anchorDyn, r, parentIndex, rezR);
+        }
+    }
+}
