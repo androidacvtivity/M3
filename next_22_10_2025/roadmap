@@ -1,4 +1,14 @@
-    //Aici ar trebui să fie o atenționare referitoare la rândul 2.
-    //Este 
-// Cod eroare: 03-013.1, Cap II. (tab. №7), Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (0.00)
-// Cod eroare: 03-013.1, Cap II. (tab. №7), Rândul "Total salariați", Col.6 - Cap II., Rândul 2, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (0.00)
+//De ce apare aceasta eroare? 03-078 in  tab. №13 ?
+//Cod eroare: 03 -078, Cap.I. (tab. №13), Rândul "Femei", Col.6 - Daca este Rândul 1, Col.6 sau Col. 7 Cap.I., atunci trebuie sa fie Rândul 1, Col.1 Cap II.si invers, pentru fiecare rând
+
+
+//Cod eroare: 03 -078, Cap.I. (tab. №13), Rândul "Femei", Col.6 -
+// Daca este Rândul 1, Col.6 sau Col. 7 Cap.I., atunci trebuie sa fie
+// Rândul 1, Col.1 Cap II.si invers, pentru fiecare rând
+
+// In tab. №13 -- Rândul 1, Col.6 sau Col. 7 Cap.I.,
+// este col7   -- 1.7 CUATM - 8300000
+//si in capitolul II -- Rândul 1, Col.1 Cap II.
+// este col1  -- 102.6 -- CUATM - 8300000
+
+//Nu trebuie sa apara eroatrea 03-078 - dece apare ? 
