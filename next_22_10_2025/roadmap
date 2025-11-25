@@ -1,14 +1,72 @@
-//De ce apare aceasta eroare? 03-078 in  tab. №13 ?
-//Cod eroare: 03 -078, Cap.I. (tab. №13), Rândul "Femei", Col.6 - Daca este Rândul 1, Col.6 sau Col. 7 Cap.I., atunci trebuie sa fie Rândul 1, Col.1 Cap II.si invers, pentru fiecare rând
+//   Verifică regula de validare 03-064.Lipsește referirea la tabel.În general, regula necesită modificări.Cred că la bază sunt indicate mai multe coloane decât este necesar.Eroarea trebuie să apară:
+
+//     Cap.I: Când lipsește Col.6 sau 7 R.1 Total
+//     Cap.II: Când lipsește Col.1 R.1 Total
 
 
-//Cod eroare: 03 -078, Cap.I. (tab. №13), Rândul "Femei", Col.6 -
-// Daca este Rândul 1, Col.6 sau Col. 7 Cap.I., atunci trebuie sa fie
-// Rândul 1, Col.1 Cap II.si invers, pentru fiecare rând
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
+function validate_rule_03064(param, index, parentIndex) {
+    var msg = Drupal.t('Cap @table Rândul 1 total lipsesc datele în CAEM principal', { '@table': param.table });
+    var rowIsFilled = false;
 
-// In tab. №13 -- Rândul 1, Col.6 sau Col. 7 Cap.I.,
-// este col7   -- 1.7 CUATM - 8300000
-//si in capitolul II -- Rândul 1, Col.1 Cap II.
-// este col1  -- 102.6 -- CUATM - 8300000
+    if (param.table == 'I.') {
+        for (var i = 2; i <= 9; i++) {
+            var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
+            var val_T = get_field_value(field_T, index, parentIndex);
 
-//Nu trebuie sa apara eroatrea 03-078 - dece apare ? 
+            if (val_T) {
+                rowIsFilled = true;
+                break;
+            }
+        }
+    }
+    else {
+        for (var i = 2; i <= 8; i++) {
+            var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
+            var val_T = get_field_value(field_T, index, parentIndex);
+
+            if (val_T) {
+                rowIsFilled = true;
+                break;
+            }
+        }
+
+    }
+
+    if (!rowIsFilled) {
+        webform.warnings.push({
+            'fieldName': '',
+            'index': 0,
+            'weight': 64,
+            'options': {
+                'hide_title': true
+            },
+            'msg': generateMessageTitle('03-064', msg, field_T, index, parentIndex),
+        });
+    }
+}
