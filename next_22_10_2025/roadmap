@@ -1,4 +1,4 @@
-//Buna dimineata.Acum apare 
-// Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (249.00)
-// Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 1, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (249.00)
-//Randul 3 este la fel completat dar nu apare eroarea. In fisierul xml vezi datele  
+    //Aici ar trebui să fie o atenționare referitoare la rândul 2.
+    //Este 
+// Cod eroare: 03-013.1, Cap II. (tab. №7), Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (0.00)
+// Cod eroare: 03-013.1, Cap II. (tab. №7), Rândul "Total salariați", Col.6 - Cap II., Rândul 2, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (0.00)

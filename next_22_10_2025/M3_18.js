@@ -1271,6 +1271,12 @@
 
 
     //-------------------------------------------------------------------------
+    //Vezi in fisierul xml -  datele salvate in xml 
+// Cod eroare: 03-013.1, Cap II. (tab. №7), Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (0.00)
+// Cod eroare: 03-013.1, Cap II. (tab. №12), Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (7.99)
+// Cod eroare: 03-013.1, Cap II. (tab. №12), Rândul "Total salariați", Col.6 - Cap II., Rândul 1, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (7.99)
+
+// Acum sa rezxolvam si pentru filiale 
     function validate_rule_03013_1(param, index, parentIndex) {
         if (!param) return;
 

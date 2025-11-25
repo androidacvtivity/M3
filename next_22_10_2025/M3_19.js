@@ -1212,42 +1212,51 @@
 
 //------------------------------------------------------------------
 
-    // 03-013 — activ DOAR pentru F (Femei); Total (T) este ignorat
     function validate_rule_03013(fieldsInfo, index, parentIndex) {
         var f1 = get_field_value(fieldsInfo.f1, index, parentIndex);
         var f2 = get_field_value(fieldsInfo.f2, index, parentIndex);
-        var rez = toFloat((toFloat(f2) * 100) / toFloat(f1));
+
+        var f1n = toFloat(f1);
+        var f2n = toFloat(f2);
+
+        // dacă rândul este total (T) — ieșim
         var matches = fieldsInfo.f1.match(/([T|F])+_C(\d)/);
+        if (matches && matches[1] !== 'F') {
+            return;
+        }
+
+        // coloanele care determină dacă rândul este completat
+        var cols = [2, 7, 8];
         var rowIsFilled = false;
 
-        // Implicit toate col., dar pentru F restrângem la [2,7,8]
-        var cols = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        for (var k = 0; k < cols.length; k++) {
+            var col = cols[k];
+            var field = fieldsInfo.f1.replace(matches[1] + '_C' + matches[2], matches[1] + '_C' + col);
+            var val = get_field_value(field, index, parentIndex);
 
-        if (matches) {
-            // Rulează NUMAI pe F; dacă nu e F, ieșim fără validare
-            if (matches[1] !== 'F') {
-                return; // dezactivat pentru Total (T)
-            }
-            cols = [2, 7, 8];
-
-            for (var k = 0; k < cols.length; k++) {
-                var col = cols[k];
-                var field = fieldsInfo.f1.replace(matches[1] + '_C' + matches[2], matches[1] + '_C' + col);
-                var field_val = get_field_value(field, index, parentIndex);
-
-                // păstrăm aceeași logică existentă
-                if (field_val != '' || field_val != 'undefined') {
-                    rowIsFilled = true;
-                    break;
-                }
+            // ✔️ rândul se consideră completat doar dacă există valori numerice > 0
+            if (!isNaN(val) && Number(val) > 0) {
+                rowIsFilled = true;
+                break;
             }
         }
 
-        if (rowIsFilled && (rez < 8 || rez > 10)) {
-            var msg = Drupal.t('Cap II., Rândul @row, Col6 * 100 / Rândul @row, Col1 trebuie să fie în intervalul [8%-10%], (@result)', {
-                '@row': getRowFromFieldName(fieldsInfo.f2, index),
-                '@result': formatNumber(rez, 2)
-            });
+        // dacă rândul nu e completat → nu validăm deloc
+        if (!rowIsFilled) {
+            return;
+        }
+
+        // calcul procent
+        var rez = (f1n > 0) ? toFloat((f2n * 100) / f1n) : 0;
+
+        if (rez < 8 || rez > 10) {
+            var msg = Drupal.t(
+                'Cap II., Rândul @row, Col6 * 100 / Rândul @row, Col1 trebuie să fie în intervalul [8%-10%], (@result)',
+                {
+                    '@row': getRowFromFieldName(fieldsInfo.f2, index),
+                    '@result': formatNumber(rez, 2)
+                }
+            );
 
             webform.warnings.push({
                 'fieldName': fieldsInfo.f2,
@@ -1259,90 +1268,289 @@
             });
         }
     }
-// In fisierul xml - sunt datele completate
- // 03-013.1 nu lucreaza pentru randurile dinamice 
 
-//Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (7.00)
-//Cod eroare: 03-013.1, Cap II., Rândul "Total salariați", Col.6 - Cap II., Rândul 1, (Col.6(T - F) * 100 / Col.1(T - F)) trebuie să fie în intervalul[8 % -10 %], (7.00)
-    // ---------------------------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------
+
     function validate_rule_03013_1(param, index, parentIndex) {
-        if (
-            field_exists(param.c1_T, index, parentIndex) && field_exists(param.c1_F, index, parentIndex) &&
-            field_exists(param.c6_T, index, parentIndex) && field_exists(param.c6_F, index, parentIndex)
-        ) {
-            var c1_T = toFloat(get_field_value(param.c1_T, index, parentIndex));
-            var c1_F = toFloat(get_field_value(param.c1_F, index, parentIndex));
-            var c6_T = toFloat(get_field_value(param.c6_T, index, parentIndex));
-            var c6_F = toFloat(get_field_value(param.c6_F, index, parentIndex));
+        if (!param) return;
 
-            var denom = (c1_T - c1_F);
-            var numer = (c6_T - c6_F) * 100;
-
-            if (denom) {
-                var rez = toFloat(numer / denom);
-                if (rez < 8 || rez > 10) {
-                    var msg = Drupal.t('Cap II., Rândul @row, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (@result)', {
-                        '@row': getRowFromFieldName(param.c6_T, index),
-                        '@result': formatNumber(rez, 2)
-                    });
-                    webform.warnings.push({
-                        'fieldName': param.c6_T,
-                        'index': index,
-                        'parentIndex': parentIndex,
-                        'weight': 131,
-                        'options': { 'hide_title': true },
-                        'msg': generateMessageTitle('03-013.1', msg, param.c6_T, index, parentIndex)
-                    });
-                }
-            }
-        }
-    }
-
-
-    function validate_rule_03014(fieldsInfo, index, parentIndex) {
-        var f1 = get_field_value(fieldsInfo.f1, index, parentIndex);
-        var f2 = get_field_value(fieldsInfo.f2, index, parentIndex);
-        var rez = toFloat((toFloat(f2) * 100) / toFloat(f1));
-        var matches = fieldsInfo.f1.match(/([T|F])+_C(\d)/);
-        var rowIsFilled = false;
-
-        var cols = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-        if (matches) {
-            if (matches[2] == 'f') {
-                cols = [2, 7, 8];
-            }
-
-            for (var k = 0; k < cols.length; k++) {
-                var col = cols[k];
-                var field = fieldsInfo.f1.replace(matches[1] + '_C' + matches[2], matches[1] + '_C' + col);
-                var field_val = get_field_value(field, index, parentIndex);
-
-                if (field_val != '') {
-                    rowIsFilled = true;
-                    break;
-                }
-            }
+        function toNum(v) {
+            var f = parseFloat(v);
+            return isNaN(f) ? 0 : f;
         }
 
-        if (rowIsFilled && (rez < 4 || rez > 5)) {
-            var msg = Drupal.t('Cap II., Rândul @row, Col7 * 100/ Rândul @row, Col1 trebuie să fie în intervalul [4%-5%], (@result)', {
-                '@row': getRowFromFieldName(fieldsInfo.f2, index),
-                '@result': formatNumber(rez, 2)
-            });
+        function fieldVal(fieldName, i, p) {
+            if (!fieldName) return '';
+            if (!field_exists(fieldName, i, p)) return '';
+            return get_field_value(fieldName, i, p);
+        }
+
+        function rowHasData_at(fieldNames, i, p) {
+            for (var k = 0; k < fieldNames.length; k++) {
+                var f = fieldNames[k];
+                if (!f) continue;
+                if (field_exists(f, i, p)) {
+                    var v = get_field_value(f, i, p);
+                    if (v !== '' && v !== null && typeof v !== 'undefined') {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function pushWarn(anchorField, r, p, rez) {
+            var msg = Drupal.t(
+                'Cap II., Rândul @row, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (@result)',
+                {
+                    '@row': getRowFromFieldName(anchorField, r),
+                    '@result': formatNumber(rez, 2)
+                }
+            );
             webform.warnings.push({
-                'fieldName': fieldsInfo.f2,
-                'index': index,
-                'parentIndex': parentIndex,
-                'weight': 14,
-                'options': {
-                    'hide_title': true
-                },
-                'msg': generateMessageTitle('03-014', msg, fieldsInfo.f2, index, parentIndex)
+                fieldName: anchorField,
+                index: r,
+                parentIndex: p,
+                weight: 131,
+                options: { hide_title: true },
+                msg: generateMessageTitle('03-013.1', msg, anchorField, r, p)
             });
+        }
+
+        var values = (Drupal.settings &&
+            Drupal.settings.mywebform &&
+            Drupal.settings.mywebform.values) || {};
+
+        // Detectăm dacă este param pentru rânduri dinamice:
+        // - fără filiale:  CAPII_R_T_C2
+        // - cu filiale:    CAPII_R_T_C2_FILIAL
+        var isDynamic =
+            param.c1_T &&
+            (/^CAPII_R_T_C\d+$/.test(param.c1_T) ||
+                /^CAPII_R_T_C\d+_FILIAL$/.test(param.c1_T));
+
+        // ----------------------------------------------------
+        // 1) CAZ STATIC – CAPII_R00_..., CAPII_R01_...
+        //     + și apelurile pe câmpuri *_FILIAL cu index simplu
+        // ----------------------------------------------------
+        if (!isDynamic) {
+            // aici ne bazăm pe index (0 pentru R00, 1 pentru R01, sau index de filială)
+            var c1T_raw = fieldVal(param.c1_T, index, parentIndex);
+            var c1F_raw = fieldVal(param.c1_F, index, parentIndex);
+            var c6T_raw = fieldVal(param.c6_T, index, parentIndex);
+            var c6F_raw = fieldVal(param.c6_F, index, parentIndex);
+
+            // rândul e considerat completat dacă are ceva pe Col.1 sau Col.6 (T/F)
+            var rowFilled = (
+                (c1T_raw !== '' && c1T_raw !== null && typeof c1T_raw !== 'undefined') ||
+                (c1F_raw !== '' && c1F_raw !== null && typeof c1F_raw !== 'undefined') ||
+                (c6T_raw !== '' && c6T_raw !== null && typeof c6T_raw !== 'undefined') ||
+                (c6F_raw !== '' && c6F_raw !== null && typeof c6F_raw !== 'undefined')
+            );
+            if (!rowFilled) return;
+
+            var c1T = toNum(c1T_raw);
+            var c1F = toNum(c1F_raw);
+            var c6T = toNum(c6T_raw);
+            var c6F = toNum(c6F_raw);
+
+            var denom = c1T - c1F;
+            if (!denom) return;
+
+            var numer = (c6T - c6F) * 100;
+            var rez = toFloat(numer / denom);
+
+            if (rez < 8 || rez > 10) {
+                var anchor =
+                    (param.c6_T && field_exists(param.c6_T, index, parentIndex)) ? param.c6_T :
+                        (param.c6_F && field_exists(param.c6_F, index, parentIndex)) ? param.c6_F :
+                            (param.c1_T && field_exists(param.c1_T, index, parentIndex)) ? param.c1_T :
+                                param.c1_F;
+
+                pushWarn(anchor, index, parentIndex, rez);
+            }
+            return;
+        }
+
+        // ----------------------------------------------------
+        // 2) CAZ DINAMIC – CAPII_R_T_C* (Rânduri 2,3,...) 
+        //    atât pe central, cât și pe filiale
+        // ----------------------------------------------------
+        var baseArr =
+            values[param.c1_T] ||
+            values[param.c1_F] ||
+            values[param.c6_T] ||
+            values[param.c6_F];
+
+        // Aici e diferența importantă pentru filiale:
+        // - pe central: baseArr = [rânduri]
+        // - pe filiale: baseArr = [filială][rând]
+        var dynCount = 0;
+        if (Array.isArray(baseArr)) {
+            if (typeof parentIndex !== 'undefined' &&
+                Array.isArray(baseArr[parentIndex])) {
+                // cazul filiale: vector de vectori [filială][rând]
+                dynCount = baseArr[parentIndex].length;
+            } else {
+                // cazul central: vector simplu [rând]
+                dynCount = baseArr.length;
+            }
+        }
+        if (!dynCount) return;
+
+        for (var r = 0; r < dynCount; r++) {
+            // rând valid doar dacă are ceva pe Col.1 sau Col.6 (T/F)
+            if (!rowHasData_at([param.c1_T, param.c1_F, param.c6_T, param.c6_F], r, parentIndex)) {
+                continue;
+            }
+
+            var c1T_raw_r = fieldVal(param.c1_T, r, parentIndex);
+            var c1F_raw_r = fieldVal(param.c1_F, r, parentIndex);
+            var c6T_raw_r = fieldVal(param.c6_T, r, parentIndex);
+            var c6F_raw_r = fieldVal(param.c6_F, r, parentIndex);
+
+            var c1T_r = toNum(c1T_raw_r);
+            var c1F_r = toNum(c1F_raw_r);
+            var c6T_r = toNum(c6T_raw_r);
+            var c6F_r = toNum(c6F_raw_r);
+
+            var denomR = c1T_r - c1F_r;
+            if (!denomR) continue;
+
+            var numerR = (c6T_r - c6F_r) * 100;
+            var rezR = toFloat(numerR / denomR);
+
+            if (rezR < 8 || rezR > 10) {
+                var anchorDyn =
+                    (param.c6_T && field_exists(param.c6_T, r, parentIndex)) ? param.c6_T :
+                        (param.c1_T && field_exists(param.c1_T, r, parentIndex)) ? param.c1_T :
+                            param.c1_F;
+
+                pushWarn(anchorDyn, r, parentIndex, rezR);
+            }
         }
     }
 
 
+    //--------------------------------------------------------------------------
+
+    // 03-015.1  Cap II (T-F), Col.7*100 / (Col.1 - Col.6) ∈ [1%-13%] — warning
+    // Mapare internă: Col.1 -> C2 ; Col.6 -> C7 ; Col.7 -> C8 ; calcul pe (T-F)
+    // Rulează pe static (apelul curent index,parentIndex) + iterează TOATE rândurile dinamice R-n.
+    function validate_rule_03015_1(param, index, parentIndex) {
+        if (!param) return;
+
+        // helpers în stilul fișierului
+        function _exists(f, i, p) { try { return field_exists(f, i, p); } catch (e) { return false; } }
+        function _raw(f, i, p) { return _exists(f, i, p) ? get_field_value(f, i, p) : ''; }
+        function _num(v) { var f = parseFloat(v); return isNaN(f) ? 0 : f; }
+        function _hasAny(fields, i, p) {
+            for (var k = 0; k < fields.length; k++) {
+                var f = fields[k];
+                if (_exists(f, i, p)) {
+                    var v = get_field_value(f, i, p);
+                    if (v !== '' && typeof v !== 'undefined' && v !== null) return true;
+                }
+            }
+            return false;
+        }
+        function _validateOne(i, p, anchorPref) {
+            // rândul are ceva pe C2/C7/C8 (T/F)?
+            if (!_hasAny([param.c1_T, param.c1_F, param.c6_T, param.c6_F, param.c7_T, param.c7_F], i, p)) return;
+
+            var c1_T = _num(_raw(param.c1_T, i, p)); // Col.1 (T)  -> C2
+            var c1_F = _num(_raw(param.c1_F, i, p)); // Col.1 (F)
+            var c6_T = _num(_raw(param.c6_T, i, p)); // Col.6 (T)  -> C7
+            var c6_F = _num(_raw(param.c6_F, i, p)); // Col.6 (F)
+            var c7_T = _num(_raw(param.c7_T, i, p)); // Col.7 (T)  -> C8
+            var c7_F = _num(_raw(param.c7_F, i, p)); // Col.7 (F)
+
+            var numer = (c7_T - c7_F) * 100;                   // Col.7 (T-F) * 100
+            var denom = (c1_T - c1_F) - (c6_T - c6_F);         // (Col.1 (T-F) - Col.6 (T-F))
+
+            if (!isFinite(denom) || denom === 0) return;       // fără Infinity/NaN
+
+            var rez = toFloat(numer / denom);
+            if (rez < 1 || rez > 13) {
+                var anchor =
+                    (_exists(param.c7_T, i, p) ? param.c7_T :
+                        _exists(param.c7_F, i, p) ? param.c7_F :
+                            _exists(param.c1_T, i, p) ? param.c1_T : param.c1_F);
+
+                var msg = Drupal.t(
+                    'Cap II., Rândul @row, (Col.7 (T-F) * 100 / (Col.1 (T-F) - Col.6 (T-F))) trebuie să fie în intervalul [1%-13%], (@result)',
+                    { '@row': getRowFromFieldName(anchor, i), '@result': formatNumber(rez, 2) }
+                );
+                webform.warnings.push({
+                    'fieldName': anchor,
+                    'index': i,
+                    'parentIndex': p,
+                    'weight': 151,
+                    'options': { 'hide_title': true },
+                    'msg': generateMessageTitle('03-015.1', msg, anchor, i, p)
+                });
+            }
+        }
+
+        // 1) STATIC: rulează pe apelul curent (ex. R00/R01) — dacă infrastructura cheamă per-rând, e suficient
+        _validateOne(index, parentIndex);
+
+        // 2) DINAMIC: iterează R-n folosind sursa de adevăr din values (fără DOM/jQuery)
+        var values = (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values) || {};
+        // detectăm un vector reprezentativ pentru numărul de rânduri dinamice
+        var baseArr =
+            values[param.c1_T] || values[param.c1_F] ||
+            values[param.c6_T] || values[param.c6_F] ||
+            values[param.c7_T] || values[param.c7_F];
+
+        var dynCount = Array.isArray(baseArr) ? baseArr.length : 0;
+
+        for (var r = 0; r < dynCount; r++) {
+            _validateOne(r, parentIndex);
+        }
+    }
+
+
+    //-------------------------------------------------------------------------
+
+
+    // înlocuiește funcția validate_rule_03114 cu această versiune robustă
+    function validate_rule_03114(param, index, parentIndex) {
+        var f1 = param.fieldTemplate.replace('_COL_', 2); // Col.1 intern = C2
+        // dacă lipsește rândul/câmpul, ieșim liniștiți
+        if (!field_exists(f1, index, parentIndex)) return;
+
+        var f1_raw = get_field_value(f1, index, parentIndex);
+        var f1_val = toFloat(f1_raw);
+
+        for (var i = 7; i <= 8; i++) { // Col.6-7 intern = C7..C8
+            var f2 = param.fieldTemplate.replace('_COL_', i);
+            if (!field_exists(f2, index, parentIndex)) continue;
+
+            var f2_raw = get_field_value(f2, index, parentIndex);
+            // verificăm explicit “completat” ca șir ne-gol — exact ca în restul fișierului
+            var f2_has = (f2_raw !== '' && typeof f2_raw !== 'undefined' && f2_raw !== null);
+            if (!f2_has) continue;
+
+            var f2_val = toFloat(f2_raw);
+
+            var msg = Drupal.t('Cap.II., Rândul 00-T, col. 1 > Cap.II., Rândul 00-T, col. @col', { '@col': i - 1 });
+            if (isFinite(f1_val) && isFinite(f2_val) && f1_val <= f2_val) {
+                webform.errors.push({
+                    'fieldName': f1,
+                    'index': index || 0,
+                    'parentIndex': parentIndex,
+                    'weight': 114,
+                    'options': { 'hide_title': true },
+                    'msg': generateMessageTitle('03-114', msg, f1, index, parentIndex),
+                });
+            }
+        }
+    }
+
+
+    //----------------------------------------------------------------------
     // 
   
     function validate_rule_03015(fieldsInfo, index, parentIndex) {
@@ -1915,7 +2123,7 @@
         var val = get_field_value(field, index, parentIndex);
         var rowIsFilled = false;
 
-        for (var i = 2; i <= 11; i++) {
+        for (var i = 2; i <= 9; i++) {
             var fieldNameT = field.replace('_C1', '_C' + i);
             var fieldNameF = field.replace('_T_C1', '_F_' + 'C' + i);
             var f_val = '';
@@ -2251,7 +2459,7 @@
                 '@result': formatNumber(result, 2)
             });
 
-            if (result >= 90 && result <= 110) {
+            if (result >= 90 && result <= 10) {
                 var titleParts = generateTitleFromField(param.t1_T, index, parentIndex);
                 var fieldTitle = titleParts.table + ', ' + Drupal.t('Rândurile "Total salariați" (T) și "Femei" (F)') + ', ' + titleParts.col;
 
@@ -2269,30 +2477,8 @@
         }
     }
 
-    //     Ok.I have same error in this function. 
-    // Fix  this. 
-    // function validate_rule_03114(param, index) {
-    //     var f1 = param.fieldTemplate.replace('_COL_', 2);
-    //     var f1_val = get_field_value(f1, index);
 
-    //     for (var i = 7; i <= 8; i++) {
-    //         var msg = Drupal.t('Cap.II., Rândul 00-T, col. 1 > Cap.II., Rândul 00-T, col. @col', { '@col': i - 1 });
-    //         var f2 = param.fieldTemplate.replace('_COL_', i);
-    //         var f2_val = get_field_value(f2, index);
-
-    //         if (f2_val !== '' && toFloat(f1_val) <= toFloat(f2_val)) {
-    //             webform.errors.push({
-    //                 'fieldName': f1,
-    //                 'index': 0,
-    //                 'weight': 114,
-    //                 'options': {
-    //                     'hide_title': true
-    //                 },
-    //                 'msg': generateMessageTitle('03-114', msg, f1, index),
-    //             });
-    //         }
-    //     }
-    // }
+    
 
     function validate_rule_03114(param, index) {
         var f1 = param.fieldTemplate.replace('_COL_', 2);
@@ -2386,7 +2572,7 @@
         var rowIsFilled = false;
 
         if (param.table == 'I.') {
-            for (var i = 2; i <= 11; i++) {
+            for (var i = 2; i <= 9; i++) {
                 var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
                 var val_T = get_field_value(field_T, index, parentIndex);
 
@@ -2971,42 +3157,8 @@ case '03137':
 
         return static_form_version;
     }
-    // 03-015.1  Cap II (T-F), Col.7*100 / (Col.1 - Col.6) ∈ [1%-13%]  — warning
-    // Internal mapping: Col.1 -> C2 ; Col.6 -> C7 ; Col.7 -> C8 ; computed on (T-F)
-    function validate_rule_03015_1(param, index, parentIndex) {
-        if (
-            field_exists(param.c1_T, index, parentIndex) && field_exists(param.c1_F, index, parentIndex) &&
-            field_exists(param.c6_T, index, parentIndex) && field_exists(param.c6_F, index, parentIndex) &&
-            field_exists(param.c7_T, index, parentIndex) && field_exists(param.c7_F, index, parentIndex)
-        ) {
-            var c1_T = toFloat(get_field_value(param.c1_T, index, parentIndex)); // C2 (Col.1)
-            var c1_F = toFloat(get_field_value(param.c1_F, index, parentIndex));
-            var c6_T = toFloat(get_field_value(param.c6_T, index, parentIndex)); // C7 (Col.6)
-            var c6_F = toFloat(get_field_value(param.c6_F, index, parentIndex));
-            var c7_T = toFloat(get_field_value(param.c7_T, index, parentIndex)); // C8 (Col.7)
-            var c7_F = toFloat(get_field_value(param.c7_F, index, parentIndex));
 
-            var numer = (c7_T - c7_F) * 100;
-            var denom = (c1_T - c1_F) - (c6_T - c6_F);
-
-            if (denom) {
-                var rez = toFloat(numer / denom);
-                if (rez < 1 || rez > 13) {
-                    var msg = Drupal.t('Cap II., Rândul @row, (Col.7 (T-F) * 100 / (Col.1 (T-F) - Col.6 (T-F))) trebuie să fie în intervalul [1%-13%], (@result)', {
-                        '@row': getRowFromFieldName(param.c7_T, index),
-                        '@result': formatNumber(rez, 2)
-                    });
-                    webform.warnings.push({
-                        'fieldName': param.c7_T,
-                        'index': index,
-                        'parentIndex': parentIndex,
-                        'weight': 151,
-                        'options': { 'hide_title': true },
-                        'msg': generateMessageTitle('03-015.1', msg, param.c7_T, index, parentIndex)
-                    });
-                }
-            }
-        }
-    }
+     
+ 
 })(jQuery);
 ;
