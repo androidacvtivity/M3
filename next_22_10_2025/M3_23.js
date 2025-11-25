@@ -2591,51 +2591,83 @@
             });
         }
     }
-//   Verifică regula de validare 03-064.Lipsește referirea la tabel.În general, regula necesită modificări.Cred că la bază sunt indicate mai multe coloane decât este necesar.Eroarea trebuie să apară:
+//--------------------------------------------------
 
-//     Cap.I: Când lipsește Col.6 sau 7 R.1 Total
-//     Cap.II: Când lipsește Col.1 R.1 Total
+
     function validate_rule_03064(param, index, parentIndex) {
-        var msg = Drupal.t('Cap @table Rândul 1 total lipsesc datele în CAEM principal', { '@table': param.table });
-        var rowIsFilled = false;
+        if (!param) return;
 
-        if (param.table == 'I.') {
-            for (var i = 2; i <= 9; i++) {
-                var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
-                var val_T = get_field_value(field_T, index, parentIndex);
-
-                if (val_T) {
-                    rowIsFilled = true;
-                    break;
-                }
-            }
-        }
-        else {
-            for (var i = 2; i <= 8; i++) {
-                var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
-                var val_T = get_field_value(field_T, index, parentIndex);
-
-                if (val_T) {
-                    rowIsFilled = true;
-                    break;
-                }
-            }
-
+        // helper simplu: verifică dacă un câmp există și are o valoare nenulă / nevidă
+        function hasValue(fieldName) {
+            if (!fieldName) return false;
+            if (!field_exists(fieldName)) return false; // index / parentIndex nu sunt folosite la statice
+            var v = get_field_value(fieldName);
+            return v !== '' && v !== null && typeof v !== 'undefined';
         }
 
-        if (!rowIsFilled) {
-            webform.warnings.push({
-                'fieldName': '',
-                'index': 0,
-                'weight': 64,
-                'options': {
-                    'hide_title': true
-                },
-                'msg': generateMessageTitle('03-064', msg, field_T, index, parentIndex),
-            });
+        // vom construi câmpurile exact cum trebuie:
+        // fieldTemplate: ex. "CAPIa_R01__TYPE__C_COL_" sau "CAPII_R01__TYPE__C_COL_"
+        // înlocuim _TYPE_ cu T/F și _COL_ cu numărul de coloană
+
+        if (param.table === 'I.') {
+            // Cap.I – verificăm doar Col.6 și Col.7 pentru Rândul 1 "Total salariați"
+            var c6_T = param.fieldTemplate.replace('_COL_', 6).replace('_TYPE_', 'T');
+            var c6_F = param.fieldTemplate.replace('_COL_', 6).replace('_TYPE_', 'F');
+            var c7_T = param.fieldTemplate.replace('_COL_', 7).replace('_TYPE_', 'T');
+            var c7_F = param.fieldTemplate.replace('_COL_', 7).replace('_TYPE_', 'F');
+
+            var rowHasData =
+                hasValue(c6_T) || hasValue(c6_F) ||
+                hasValue(c7_T) || hasValue(c7_F);
+
+            if (!rowHasData) {
+                var anchorField = hasValue(c7_T) ? c7_T :
+                    hasValue(c6_T) ? c6_T :
+                        (field_exists(c7_T) ? c7_T : c6_T);
+
+                var msg = Drupal.t(
+                    'Cap I., Rândul 1 \"Total salariați\" trebuie să aibă date pe Col.6 sau Col.7 (CAEM principal)'
+                );
+
+                webform.warnings.push({
+                    fieldName: anchorField,
+                    index: 0,
+                    parentIndex: parentIndex,
+                    weight: 64,
+                    options: { hide_title: true },
+                    msg: generateMessageTitle('03-064', msg, anchorField, 0, parentIndex)
+                });
+            }
+
+        } else if (param.table === 'II.') {
+            // Cap.II – verificăm doar Col.1 pentru Rândul 1 "Total salariați"
+            var c1_T = param.fieldTemplate.replace('_COL_', 1).replace('_TYPE_', 'T');
+            var c1_F = param.fieldTemplate.replace('_COL_', 1).replace('_TYPE_', 'F');
+
+            var rowHasData = hasValue(c1_T) || hasValue(c1_F);
+
+            if (!rowHasData) {
+                var anchorField = hasValue(c1_T) ? c1_T :
+                    (field_exists(c1_T) ? c1_T : c1_F);
+
+                var msg = Drupal.t(
+                    'Cap II., Rândul 1 \"Total salariați\" trebuie să aibă date pe Col.1 (CAEM principal)'
+                );
+
+                webform.warnings.push({
+                    fieldName: anchorField,
+                    index: 0,
+                    parentIndex: parentIndex,
+                    weight: 64,
+                    options: { hide_title: true },
+                    msg: generateMessageTitle('03-064', msg, anchorField, 0, parentIndex)
+                });
+            }
         }
     }
 
+
+//------------------------------------------------
     function get_region_by_cuatm(cuatm) {
         var region = '';
         if (typeof cuatm_munca3 != 'undefined') {
