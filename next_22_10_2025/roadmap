@@ -1,72 +1,15 @@
-//   Verifică regula de validare 03-064.Lipsește referirea la tabel.În general, regula necesită modificări.Cred că la bază sunt indicate mai multe coloane decât este necesar.Eroarea trebuie să apară:
+Acum validarea ruleaza dar nu gaseste eroare - dar in raport erori sunt. 
 
-//     Cap.I: Când lipsește Col.6 sau 7 R.1 Total
-//     Cap.II: Când lipsește Col.1 R.1 Total
+Daca varoabila este null - trebuie sa o convertesti in zero si dupa sa vaerifci. 
 
 
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap.I., Rândul "Total salariați", Col.8 - Cap I.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-// Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II.Rândul 1 total lipsesc datele în CAEM principal
-function validate_rule_03064(param, index, parentIndex) {
-    var msg = Drupal.t('Cap @table Rândul 1 total lipsesc datele în CAEM principal', { '@table': param.table });
-    var rowIsFilled = false;
+Validarea este simpla - dece  nu merge ? 
 
-    if (param.table == 'I.') {
-        for (var i = 2; i <= 9; i++) {
-            var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
-            var val_T = get_field_value(field_T, index, parentIndex);
+Vezi in fiserul xml - CAPIa_CUATM_R_INDEX_FILIAL-2 
+pe randul CAPIa_R01_T_C2_FILIAL-2 - CAPIa_R01_T_C10_FILIAL-2
 
-            if (val_T) {
-                rowIsFilled = true;
-                break;
-            }
-        }
-    }
-    else {
-        for (var i = 2; i <= 8; i++) {
-            var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
-            var val_T = get_field_value(field_T, index, parentIndex);
+nu sunt date - si trebuie sa prinda eroare.
 
-            if (val_T) {
-                rowIsFilled = true;
-                break;
-            }
-        }
 
-    }
 
-    if (!rowIsFilled) {
-        webform.warnings.push({
-            'fieldName': '',
-            'index': 0,
-            'weight': 64,
-            'options': {
-                'hide_title': true
-            },
-            'msg': generateMessageTitle('03-064', msg, field_T, index, parentIndex),
-        });
-    }
-}
+
