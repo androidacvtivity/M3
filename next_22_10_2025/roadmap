@@ -1,6 +1,52 @@
-//Let's apply (Divide et impera) 
-//Now is that
-Now is that
-validate_rule_03064(get_rule_param('03064', 'static2')); -- Uncaught TypeError: can't access property "undefined", filListI is undefined
 
-  pushWarn('II.', ctxII, 'CAPII_R01_T_C2_FILIAL', 0, f2);  --Uncaught TypeError: can't access property "undefined", filListI is undefined
+//Eu am incaput asa continua si finiseaza 
+
+function validate_rule_03064_1(values) {
+var result00_T = 0;
+result00_T = parseFloat(values.CAPIa_R00_T_C2) || 0;
+result00_T += parseFloat(values.CAPIa_R00_T_C3) || 0;
+result00_T += parseFloat(values.CAPIa_R00_T_C4) || 0;
+result00_T += parseFloat(values.CAPIa_R00_T_C5) || 0;
+result00_T += parseFloat(values.CAPIa_R00_T_C6) || 0;
+result00_T += parseFloat(values.CAPIa_R00_T_C7) || 0;
+result00_T += parseFloat(values.CAPIa_R00_T_C8) || 0;
+result00_T += parseFloat(values.CAPIa_R00_T_C9) || 0;
+result00_T += parseFloat(values.CAPIa_R00_T_C10) || 0;
+
+result00_T = parseFloat(result00_T.toFixed(1)); // Convertim înapoi într-un număr
+
+  var result01_T = 0;
+  result01_T = parseFloat(values.CAPIa_R01_T_C2) || 0;
+  result01_T += parseFloat(values.CAPIa_R01_T_C3) || 0;
+  result01_T += parseFloat(values.CAPIa_R01_T_C4) || 0;
+  result01_T += parseFloat(values.CAPIa_R01_T_C5) || 0;
+  result01_T += parseFloat(values.CAPIa_R01_T_C6) || 0;
+  result01_T += parseFloat(values.CAPIa_R01_T_C7) || 0;
+  result01_T += parseFloat(values.CAPIa_R01_T_C8) || 0;
+  result01_T += parseFloat(values.CAPIa_R01_T_C9) || 0;
+  result01_T += parseFloat(values.CAPIa_R01_T_C10) || 0;
+
+
+  result01_T = parseFloat(result01_T.toFixed(1)); // Convertim înapoi într-un număr
+// Verificăm dacă valorile sunt NaN
+  if (isNaN(result00_T) || isNaN(result01_T)) {
+ 
+} else {
+  
+    if (result00_T > 0 &&  result01_T == 0) {
+    webform.errors.push({
+      'fieldName': 'CAPIa_R01_T_C2',
+      'index': 0,
+      'weight': 31,
+      'options': {
+        'hide_title': true
+      },
+      'msg': Drupal.t('Cod eroare: 03-031 - Cap V, Rând 5 >= Rând 6+ Rând 7+Rând 8+Rând 9 + Rând 10 - &v_CAPV_R5_C1 < &result03031', {
+        '&v_CAPV_R5_C1': v_CAPV_R5_C1,
+        '&result03031': result03031
+      })
+    });
+  }
+}
+
+}
