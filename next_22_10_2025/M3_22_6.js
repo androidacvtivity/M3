@@ -2592,7 +2592,46 @@
         }
     }
      //-----------------
+    function validate_rule_03064(param, index, parentIndex) {
+        var msg = Drupal.t('Cap @table Rândul 1 total lipsesc datele în CAEM principal', { '@table': param.table });
+        var rowIsFilled = false;
 
+        if (param.table == 'I.') {
+            for (var i = 2; i <= 11; i++) {
+                var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
+                var val_T = get_field_value(field_T, index, parentIndex);
+
+                if (val_T) {
+                    rowIsFilled = true;
+                    break;
+                }
+            }
+        }
+        else {
+            for (var i = 2; i <= 8; i++) {
+                var field_T = param.fieldTemplate.replace('_COL_', i).replace('_TYPE_', 'T');
+                var val_T = get_field_value(field_T, index, parentIndex);
+
+                if (val_T) {
+                    rowIsFilled = true;
+                    break;
+                }
+            }
+
+        }
+
+        if (!rowIsFilled) {
+            webform.warnings.push({
+                'fieldName': '',
+                'index': 0,
+                'weight': 64,
+                'options': {
+                    'hide_title': true
+                },
+                'msg': generateMessageTitle('03-064', msg, field_T, index, parentIndex),
+            });
+        }
+    }
 
 
     //-------------------------------------------------

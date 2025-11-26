@@ -2592,6 +2592,144 @@
         }
     }
      //-----------------
+    // 03-064 / 03-065 – CAEM principal lipsă (00-T are date, 01-T este gol)
+    // Cap I: CAPIa_R00_T_C2..C10 vs CAPIa_R01_T_C2..C10
+    // Cap II: CAPII_R00_T_C2..C11 vs CAPII_R01_T_C2..C11
+    function validate_rule_03064(param, index, parentIndex) {
+        if (!param) {
+            return;
+        }
+
+        var table = param.table || '';
+
+        // null / '', undefined -> 0
+        function toNum(v) {
+            if (v === null || typeof v === 'undefined' || v === '') return 0;
+            var s = ('' + v).replace(',', '.');
+            var f = parseFloat(s);
+            return isNaN(f) ? 0 : f;
+        }
+
+        // --- Unitatea principală (fără FILIAL) ---
+
+        function hasNonZeroMain(prefix, colFrom, colTo) {
+            var sum = 0;
+            for (var c = colFrom; c <= colTo; c++) {
+                var fieldName = prefix + c;
+                if (typeof field_exists === 'function' && field_exists(fieldName, 0, 0)) {
+                    var v = get_field_value(fieldName, 0, 0);
+                    sum += toNum(v);
+                }
+            }
+            return sum !== 0;
+        }
+
+        // --- Filiale: citim direct din Drupal.settings.mywebform.values[...] ---
+
+        var values = (Drupal.settings &&
+            Drupal.settings.mywebform &&
+            Drupal.settings.mywebform.values) || {};
+
+        function hasNonZeroFilial(prefix, colFrom, colTo, filialIdx) {
+            var sum = 0;
+            for (var c = colFrom; c <= colTo; c++) {
+                var fieldName = prefix + c + '_FILIAL';
+                var arr = values[fieldName];
+                if (Array.isArray(arr) && filialIdx < arr.length) {
+                    sum += toNum(arr[filialIdx]);
+                }
+            }
+            return sum !== 0;
+        }
+
+        function pushWarn(tableLabel, context, anchorField, idx, pIdx) {
+            var msg = Drupal.t(
+                'Cap @table, Rândul 1 Total – lipsesc datele în CAEM principal @ctx',
+                {
+                    '@table': tableLabel,
+                    '@ctx': context ? '(' + context + ')' : ''
+                }
+            );
+
+            webform.warnings.push({
+                fieldName: anchorField,
+                index: idx || 0,
+                parentIndex: pIdx || 0,
+                weight: 64,
+                options: { hide_title: true },
+                msg: generateMessageTitle('03-064', msg, anchorField, idx || 0, pIdx || 0)
+            });
+        }
+
+        // ======================
+        //    CAPITOLUL I (301)
+        // ======================
+        if (table === 'I.') {
+            var colFromI = 2;
+            var colToI = 10; // COL2..COL10
+
+            // 1) Unitatea principală: CAPIa_R00_T_C2..C10 vs CAPIa_R01_T_C2..C10
+            var has00_main = hasNonZeroMain('CAPIa_R00_T_C', colFromI, colToI);
+            var has01_main = hasNonZeroMain('CAPIa_R01_T_C', colFromI, colToI);
+
+            if (has00_main && !has01_main) {
+                // ancorăm pe prima coloană din 01-T
+                pushWarn('I.', '', 'CAPIa_R01_T_C2', 0, 0);
+            }
+
+            // 2) Filiale – exact ca în SQL: GROUP BY FILIAL
+            var filialIndexFieldI = 'CAPIa_CUATM_R_INDEX_FILIAL';
+            var filListI = values[filialIndexFieldI];
+
+            if (Array.isArray(filListI)) {
+                for (var f = 0; f < filListI.length; f++) {
+                    var has00_fil = hasNonZeroFilial('CAPIa_R00_T_C', colFromI, colToI, f);
+                    var has01_fil = hasNonZeroFilial('CAPIa_R01_T_C', colFromI, colToI, f);
+
+                    if (has00_fil && !has01_fil) {
+                        var ctxI = Drupal.t('filiala CUATM @cuatm', { '@cuatm': filListI[f] });
+                        pushWarn('I.', ctxI, 'CAPIa_R01_T_C2_FILIAL', 0, f);
+                    }
+                }
+            }
+
+            return;
+        }
+
+        // ======================
+        //    CAPITOLUL II (303)
+        // ======================
+        if (table === 'II.') {
+            var colFromII = 2;
+            var colToII = 8; // COL2..COL8
+
+            // 1) Unitatea principală: CAPII_R00_T_C2..C11 vs CAPII_R01_T_C2..C11
+            var has00_main2 = hasNonZeroMain('CAPII_R00_T_C', colFromII, colToII);
+            var has01_main2 = hasNonZeroMain('CAPII_R01_T_C', colFromII, colToII);
+
+            if (has00_main2 && !has01_main2) {
+                pushWarn('II.', '', 'CAPII_R01_T_C2', 0, 0);
+            }
+
+            // 2) Filiale – GROUP BY FILIAL
+            var filialIndexFieldII = 'CAPII_CUATM_R_INDEX_FILIAL';
+            var filListII = values[filialIndexFieldII];
+
+            if (Array.isArray(filListII)) {
+                for (var f2 = 0; f2 < filListII.length; f2++) {
+                    var has00_fil2 = hasNonZeroFilial('CAPII_R00_T_C', colFromII, colToII, f2);
+                    var has01_fil2 = hasNonZeroFilial('CAPII_R01_T_C', colFromII, colToII, f2);
+
+                    if (has00_fil2 && !has01_fil2) {
+                        var ctxII = Drupal.t('filiala CUATM @cuatm', { '@cuatm': filListII[f2] });
+                        pushWarn('II.', ctxII, 'CAPII_R01_T_C2_FILIAL', 0, f2);
+                    }
+                }
+            }
+
+            return;
+        }
+    }
 
 
 
