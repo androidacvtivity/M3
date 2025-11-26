@@ -2595,6 +2595,7 @@
     // 03-064 / 03-065 – CAEM principal lipsă (00-T are date, 01-T este gol)
     // Cap I: CAPIa_R00_T_C2..C10 vs CAPIa_R01_T_C2..C10
     // Cap II: CAPII_R00_T_C2..C11 vs CAPII_R01_T_C2..C11
+    //Give me all the function -  validate_rule_03064 - already modified
     function validate_rule_03064(param, index, parentIndex) {
         if (!param) {
             return;
@@ -2642,24 +2643,41 @@
             return sum !== 0;
         }
 
-        function pushWarn(tableLabel, context, anchorField, idx, pIdx) {
+        function pushWarn(anchorField) {
+            // Mesajul existent (păstrează exact cum îl ai tu acum,
+            // inclusiv partea cu "filiala CUATM X" dacă ai adăugat-o):
             var msg = Drupal.t(
-                'Cap @table, Rândul 1 Total – lipsesc datele în CAEM principal @ctx',
-                {
-                    '@table': tableLabel,
-                    '@ctx': context ? '(' + context + ')' : ''
-                }
+                'Cap @table., Rândul "Total salariați", Col.1 - Cap @table., Rândul 1 Total – lipsesc datele în CAEM principal (filiala CUATM @cuatm)',
+                { '@table': table, '@cuatm': filListI[f] }
             );
+
+            // --- DEDUPLICARE 03-064 ---
+            // Folosim o hartă globală în fereastră ca să nu adăugăm același mesaj de mai multe ori
+            if (!window._rule03064Seen) {
+                window._rule03064Seen = {};
+            }
+
+            // Cheia: capitol + numele câmpului-ancoră (include și FILIAL-2, FILIAL-5 etc.)
+            var key = '03064|' + table + '|' + (anchorField || '');
+
+            // Dacă deja am pus această eroare pentru acest câmp, ieșim
+            if (window._rule03064Seen[key]) {
+                return;
+            }
+            window._rule03064Seen[key] = true;
+            // --- sfârșit deduplicare ---
 
             webform.warnings.push({
                 fieldName: anchorField,
-                index: idx || 0,
-                parentIndex: pIdx || 0,
+                index: 0,
+                parentIndex: null,
                 weight: 64,
                 options: { hide_title: true },
-                msg: generateMessageTitle('03-064', msg, anchorField, idx || 0, pIdx || 0)
+                msg: generateMessageTitle('03-064', msg, anchorField, 0, null)
             });
         }
+
+
 
         // ======================
         //    CAPITOLUL I (301)
@@ -2687,11 +2705,14 @@
                     var has01_fil = hasNonZeroFilial('CAPIa_R01_T_C', colFromI, colToI, f);
 
                     if (has00_fil && !has01_fil) {
-                        var ctxI = Drupal.t('filiala CUATM @cuatm', { '@cuatm': filListI[f] });
-                        pushWarn('I.', ctxI, 'CAPIa_R01_T_C2_FILIAL', 0, f);
+                        // important: trimitem un NUME DE CÂMP REAL, cu FILIAL-<index>
+                        var anchorField = 'CAPIa_R01_T_C2_FILIAL-' + (f + 1);
+
+                        pushWarn(anchorField);
                     }
                 }
             }
+
 
             return;
         }
