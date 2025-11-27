@@ -1,91 +1,40 @@
-Inca odata 
-03-064
-//Sunt doua conditii 
-1. Cap.I: Când lipsește Col.6 sau 7 R.1 Total 
-2. Cap.II: Când lipsește Col.1 R.1 Total 
+[CAPIa_R01_T_C6]+[CAPIa_R01_T_C4]=[CAPIa_R01_T_C3]msg(Error);
+[CAPIa_R_T_C6]+[CAPIa_R_T_C4]=[CAPIa_R_T_C3{N}]msg(Error);
 
-si pentru filiale 
+[CAPIa_R01_T_C6_FILIAL]+[CAPIa_R01_T_C4_FILIAL]=[CAPIa_R01_T_C3_FILIAL{N}]msg(Error);
+[CAPIa_R_T_C6_FILIAL]+[CAPIa_R_T_C4_FILIAL]=[CAPIa_R_T_C3_FILIAL{P}{N}]msg(Error);
 
-Inca oadata in versiunea aceasta js 
-Verifică regula de validare 03-064. Lipsește referirea la tabel. În general, regula necesită modificări. Cred că la bază sunt indicate mai multe coloane decât este necesar. Eroarea trebuie să apară:
+sum([&CAPIa_R_T_C2])+[CAPIa_R01_T_C2]=[CAPIa_R00_T_C2]msg();
+sum([&CAPIa_R_T_C3])+[CAPIa_R01_T_C3]=[CAPIa_R00_T_C3]msg();
+sum([&CAPIa_R_T_C4])+[CAPIa_R01_T_C4]=[CAPIa_R00_T_C4]msg();
+sum([&CAPIa_R_T_C5])+[CAPIa_R01_T_C5]=[CAPIa_R00_T_C5]msg();
+sum([&CAPIa_R_T_C6])+[CAPIa_R01_T_C6]=[CAPIa_R00_T_C6]msg();
+sum([&CAPIa_R_T_C7])+[CAPIa_R01_T_C7]=[CAPIa_R00_T_C7]msg();
+sum([&CAPIa_R_T_C8])+[CAPIa_R01_T_C8]=[CAPIa_R00_T_C8]msg();
+sum([&CAPIa_R_T_C9])+[CAPIa_R01_T_C9]=[CAPIa_R00_T_C9]msg();
+sum([&CAPIa_R_T_C10])+[CAPIa_R01_T_C10]=[CAPIa_R00_T_C10]msg();
+sum([&CAPIa_R_T_C11])+[CAPIa_R01_T_C11]=[CAPIa_R00_T_C11]msg();
+sum([&CAPIa_R_F_C2])+[CAPIa_R01_F_C2]=[CAPIa_R00_F_C2]msg();
+sum([&CAPIa_R_F_C3])+[CAPIa_R01_F_C3]=[CAPIa_R00_F_C3]msg();
+sum([&CAPIa_R_F_C7])+[CAPIa_R01_F_C7]=[CAPIa_R00_F_C7]msg();
+sum([&CAPIa_R_F_C8])+[CAPIa_R01_F_C8]=[CAPIa_R00_F_C8]msg();
 
-    Cap.I: Când lipsește Col.6 sau 7 R.1 Total
-    Cap.II: Când lipsește Col.1 R.1 Total
-
-
-    ama sa eori 
-        Cod eroare: 03-004, Cap. I., Rândul "Total salariați", Col.7 - Cap. I., Rândul 0, Col7 * 1000 / Rândul 0, Col5 trebuie să fie în intervalul [1500-2300], (2869.57)
-    Cod eroare: 03-004, Cap. I., Rândul "Total salariați", Col.7 - Cap. I., Rândul 1, Col7 * 1000 / Rândul 1, Col5 trebuie să fie în intervalul [1500-2300], (3107.14)
-    Cod eroare: 03-013, Cap II. (tab. №7), Rândul "Femei", Col.6 - Cap II., Rândul 0, Col6 * 100 / Rândul 0, Col1 trebuie să fie în intervalul [8%-10%], (10.46)
-    Cod eroare: 03-013, Cap II. (tab. №7), Rândul "Femei", Col.6 - Cap II., Rândul 2, Col6 * 100 / Rândul 2, Col1 trebuie să fie în intervalul [8%-10%], (10.46)
-    Cod eroare: 03-015, Cap II. (tab. №12), Rândul "Femei", Col.7 - Cap II., Rândul 0, (Col.7 * 100 / (Col.1 - Col.6)) trebuie să fie în intervalul [1%-13%], (0.00)
-    Cod eroare: 03-015, Cap II. (tab. №12), Rândul "Femei", Col.7 - Cap II., Rândul 1, (Col.7 * 100 / (Col.1 - Col.6)) trebuie să fie în intervalul [1%-13%], (0.00)
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap. I., Rândul "Total salariați", Col.8 - Cap I. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-064, Cap II., Rândul "Total salariați", Col.7 - Cap II. Rândul 1 total lipsesc datele în CAEM principal
-    Cod eroare: 03-081, Cap. I. (tab. №4), Rândul "Total salariați", Col.3 - Cap. I., Daca în Rândul 1, Col.6 > 0 atunci si Rândul 1, Col.3 > 0 pe rândurile Total, și invers
-    Cod eroare: 03-082, Cap. I. (tab. №9), Rândul "Total salariați", Col.4 - Cap. I., Daca în Rândul 0, Col.4 > 0 atunci si Rândul 0, Col.7 > 0 pe rândurile Total, si invers
-    Cod eroare: 03-082, Cap. I. (tab. №9), Rândul "Total salariați", Col.4 - Cap. I., Daca în Rândul 1, Col.4 > 0 atunci si Rândul 1, Col.7 > 0 pe rândurile Total, si invers
-    Cod eroare: 03-082, Cap. I. (tab. №12), Rândul "Total salariați", Col.4 - Cap. I., Daca în Rândul 0, Col.4 > 0 atunci si Rândul 0, Col.7 > 0 pe rândurile Total, si invers
-    Cod eroare: 03-082, Cap. I. (tab. №12), Rândul "Total salariați", Col.4 - Cap. I., Daca în Rândul 1, Col.4 > 0 atunci si Rândul 1, Col.7 > 0 pe rândurile Total, si invers
-    Cod eroare: 03-082, Cap. I. (tab. №13), Rândul "Total salariați", Col.4 - Cap. I., Daca în Rândul 0, Col.4 > 0 atunci si Rândul 0, Col.7 > 0 pe rândurile Total, si invers
-    Cod eroare: 03-082, Cap. I. (tab. №13), Rândul "Total salariați", Col.4 - Cap. I., Daca în Rândul 1, Col.4 > 0 atunci si Rândul 1, Col.7 > 0 pe rândurile Total, si invers
-    Cod eroare: 03-085, Cap. I. (tab. №7), Rândul "Femei", Col.2 - Cap. II., Rândul 0, col. 1F * 1000 / Cap. I., Rândul 0, Col.2F / 12 => 5500 < 20000, pentru fiecare rând Femei, (4203.70)
-    Cod eroare: 03-085, Cap. I. (tab. №7), Rândul "Femei", Col.2 - Cap. II., Rândul 2, col. 1F * 1000 / Cap. I., Rândul 2, Col.2F / 12 => 5500 < 20000, pentru fiecare rând Femei, (4203.70)
-    Cod eroare: 03-085, Cap. I. (tab. №14), Rândul "Femei", Col.2 - Cap. II., Rândul 0, col. 1F * 1000 / Cap. I., Rândul 0, Col.2F / 12 => 5500 < 20000, pentru fiecare rând Femei, (22025.00)
-    Cod eroare: 03-085, Cap. I. (tab. №14), Rândul "Femei", Col.2 - Cap. II., Rândul 1, col. 1F * 1000 / Cap. I., Rândul 1, Col.2F / 12 => 5500 < 20000, pentru fiecare rând Femei, (22025.00)
-    Cod eroare: 03-105, Cap. I. (tab. №4), Rândul "Total salariați", Col.8 - Cap. I., Rândul 1, Col. 8 * 1000 / Rândul 1, Col. 3 / 8 trebuie să fie < 50, (Infinity)
-    Cod eroare: 03-106, Cap. I. (tab. №12), Rândul "Total salariați", Col.9 - Cap. I.a., Rândul 0, Col. 9 * 1000 / Rândul 0, Col. 4 / 8 trebuie să fie < 50, (Infinity)
-    Cod eroare: 03-106, Cap. I. (tab. №12), Rândul "Total salariați", Col.9 - Cap. I.a., Rândul 1, Col. 9 * 1000 / Rândul 1, Col. 4 / 8 trebuie să fie < 50, (Infinity)
-    Cod eroare: 03-106, Cap. I. (tab. №13), Rândul "Total salariați", Col.9 - Cap. I.a., Rândul 0, Col. 9 * 1000 / Rândul 0, Col. 4 / 8 trebuie să fie < 50, (Infinity)
-    Cod eroare: 03-106, Cap. I. (tab. №13), Rândul "Total salariați", Col.9 - Cap. I.a., Rândul 1, Col. 9 * 1000 / Rândul 1, Col. 4 / 8 trebuie să fie < 50, (Infinity)
-    Cod eroare: 03-123, Cap. I. (tab. №7), Rândul "Total salariați", Col.1 - Daca este Rândul 0, col. 1, Cap. I., atunci trebuie sa fie Rândul 0, col. 2 si invers, pentru fiecare rând
-    Cod eroare: 03-123, Cap. I. (tab. №7), Rândul "Femei", Col.1 - Daca este Rândul 0, col. 1, Cap. I., atunci trebuie sa fie Rândul 0, col. 2 si invers, pentru fiecare rând
-    Cod eroare: 03-123, Cap. I. (tab. №7), Rândul "Total salariați", Col.1 - Daca este Rândul 2, col. 1, Cap. I., atunci trebuie sa fie Rândul 2, col. 2 si invers, pentru fiecare rând
-    Cod eroare: 03-123, Cap. I. (tab. №7), Rândul "Femei", Col.1 - Daca este Rândul 2, col. 1, Cap. I., atunci trebuie sa fie Rândul 2, col. 2 si invers, pentru fiecare rând
-    Cod eroare: 03-123, Cap. I. (tab. №10), Rândul "Total salariați", Col.1 - Daca este Rândul 0, col. 1, Cap. I., atunci trebuie sa fie Rândul 0, col. 2 si invers, pentru fiecare rând
-    Cod eroare: 03-123, Cap. I. (tab. №10), Rândul "Femei", Col.1 - Daca este Rândul 0, col. 1, Cap. I., atunci trebuie sa fie Rândul 0, col. 2 si invers, pentru fiecare rând
-    Cod eroare: 03-123, Cap. I. (tab. №10), Rândul "Total salariați", Col.1 - Daca este Rândul 2, col. 1, Cap. I., atunci trebuie sa fie Rândul 2, col. 2 si invers, pentru fiecare rând
-    Cod eroare: 03-123, Cap. I. (tab. №10), Rândul "Femei", Col.1 - Daca este Rândul 2, col. 1, Cap. I., atunci trebuie sa fie Rândul 2, col. 2 si invers, pentru fiecare rând
-    Cod eroare: 03-124, Cap. I. (tab. №4), Rândul "Femei", Col.6 - Cap. I., Rândul 1, ((Col6 + Col7) / Col2) * 1000 trebuie să fie în intervalul [1500-2300] pentru Rândul Femei, (Infinity)
-    Cod eroare: 03-124, Cap. I. (tab. №9), Rândul "Femei", Col.6 - Cap. I., Rândul 0, ((Col6 + Col7) / Col2) * 1000 trebuie să fie în intervalul [1500-2300] pentru Rândul Femei, (Infinity)
-    Cod eroare: 03-124, Cap. I. (tab. №9), Rândul "Femei", Col.6 - Cap. I., Rândul 1, ((Col6 + Col7) / Col2) * 1000 trebuie să fie în intervalul [1500-2300] pentru Rândul Femei, (Infinity)
-    Cod eroare: 03-124, Cap. I. (tab. №12), Rândul "Femei", Col.6 - Cap. I., Rândul 0, ((Col6 + Col7) / Col2) * 1000 trebuie să fie în intervalul [1500-2300] pentru Rândul Femei, (Infinity)
-    Cod eroare: 03-124, Cap. I. (tab. №12), Rândul "Femei", Col.6 - Cap. I., Rândul 1, ((Col6 + Col7) / Col2) * 1000 trebuie să fie în intervalul [1500-2300] pentru Rândul Femei, (Infinity)
-    Cod eroare: 03-127, Cap. I. (tab. №1), Rândul "Total salariați", Col.2 - Cap. II., Rândul 2, col. 1 (T-F) * 1000 / Cap. I., Rândul 2, Col. 2 (T-F) / 12 => 5500 < 20000 pt fiecare rînd (21379.63)
-    Cod eroare: 03-127, Cap. I. (tab. №6), Rândul "Total salariați", Col.2 - Cap. II., Rândul 0, col. 1 (T-F) * 1000 / Cap. I., Rândul 0, Col. 2 (T-F) / 12 => 5500 < 20000 pt fiecare rînd (5200.00)
-    Cod eroare: 03-127, Cap. I. (tab. №6), Rândul "Total salariați", Col.2 - Cap. II., Rândul 1, col. 1 (T-F) * 1000 / Cap. I., Rândul 1, Col. 2 (T-F) / 12 => 5500 < 20000 pt fiecare rînd (5200.00)
-    Cod eroare: 03-013.1, Cap II. (tab. №7), Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (0.00)
-    Cod eroare: 03-013.1, Cap II. (tab. №7), Rândul "Total salariați", Col.6 - Cap II., Rândul 2, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (0.00)
-    Cod eroare: 03-013.1, Cap II. (tab. №12), Rândul "Total salariați", Col.6 - Cap II., Rândul 0, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (7.99)
-    Cod eroare: 03-013.1, Cap II. (tab. №12), Rândul "Total salariați", Col.6 - Cap II., Rândul 1, (Col.6 (T-F) * 100 / Col.1 (T-F)) trebuie să fie în intervalul [8%-10%], (7.99)
-    Cod eroare: 03-015.1, Cap II. (tab. №6), Rândul "Total salariați", Col.7 - Cap II., Rândul 0, (Col.7 (T-F) * 100 / (Col.1 (T-F) - Col.6 (T-F))) trebuie să fie în intervalul [1%-13%], (0.00)
-    Cod eroare: 03-015.1, Cap II. (tab. №7), Rândul "Total salariați", Col.7 - Cap II., Rândul 0, (Col.7 (T-F) * 100 / (Col.1 (T-F) - Col.6 (T-F))) trebuie să fie în intervalul [1%-13%], (0.00)
-    Cod eroare: 03-015.1, Cap II. (tab. №6), Rândul "Total salariați", Col.7 - Cap II., Rândul 1, (Col.7 (T-F) * 100 / (Col.1 (T-F) - Col.6 (T-F))) trebuie să fie în intervalul [1%-13%], (0.00)
-    Cod eroare: 03-015.1, Cap II. (tab. №7), Rândul "Total salariați", Col.7 - Cap II., Rândul 2, (Col.7 (T-F) * 100 / (Col.1 (T-F) - Col.6 (T-F))) trebuie să fie în intervalul [1%-13%], (0.00)
+[CAPII_R01_T_C6]+[CAPII_R01_T_C5]+[CAPII_R01_T_C3]=[CAPII_R01_T_C2]msg(Error);
+[CAPII_R_T_C6]+[CAPII_R_T_C5]+[CAPII_R_T_C3]=[CAPII_R_T_C2{N}]msg(Error);
+[CAPII_R01_T_C6_FILIAL]+[CAPII_R01_T_C5_FILIAL]+[CAPII_R01_T_C3_FILIAL]=[CAPII_R01_T_C2_FILIAL{N}]msg(Error);
+[CAPII_R_T_C6_FILIAL]+[CAPII_R_T_C5_FILIAL]+[CAPII_R_T_C3_FILIAL]=[CAPII_R_T_C2_FILIAL{P}{N}]msg(Error);
 
 
-la  03-064 Lipsește referirea la tabel 
+sum([&CAPII_R_T_C2])+[CAPII_R01_T_C2]=[CAPII_R00_T_C2]msg();
+sum([&CAPII_R_T_C3])+[CAPII_R01_T_C3]=[CAPII_R00_T_C3]msg();
+sum([&CAPII_R_T_C4])+[CAPII_R01_T_C4]=[CAPII_R00_T_C4]msg();
+sum([&CAPII_R_T_C5])+[CAPII_R01_T_C5]=[CAPII_R00_T_C5]msg();
+sum([&CAPII_R_T_C6])+[CAPII_R01_T_C6]=[CAPII_R00_T_C6]msg();
+sum([&CAPII_R_T_C7])+[CAPII_R01_T_C7]=[CAPII_R00_T_C7]msg();
+sum([&CAPII_R_T_C8])+[CAPII_R01_T_C8]=[CAPII_R00_T_C8]msg();
+sum([&CAPII_R_F_C2])+[CAPII_R01_F_C2]=[CAPII_R00_F_C2]msg();
+sum([&CAPII_R_F_C7])+[CAPII_R01_F_C7]=[CAPII_R00_F_C7]msg();
+sum([&CAPII_R_F_C8])+[CAPII_R01_F_C8]=[CAPII_R00_F_C8]msg();
+
+[CAPV_R2_C1]+[CAPV_R3_C1]+[CAPV_R4_C1]+[CAPV_R5_C1]=[CAPV_R1_C1]msg();
+[CAPV_R3_1_C1]+[CAPV_R3_2_C1]=[CAPV_R3_C1]msg()
