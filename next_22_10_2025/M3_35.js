@@ -186,6 +186,14 @@
                 fill_dynamic_section2_cuatm_fields(jQuery(this));
             });
 
+            jQuery('#mywebform-edit-form').on('mywebform:sync', function () {
+                apply_cap1_filial_autosum();
+            });
+
+            jQuery('#FILIAL_CAPIa').on('row_added row_deleted', function () {
+                apply_cap1_filial_autosum();
+            });
+
             jQuery('#CAPIa').on('row_added', function () {
                 var gridObject = jQuery(this).getGridObject();
                 var $grid2 = jQuery('#CAPII');
@@ -244,6 +252,7 @@
     webform.afterLoad.munca3 = function () {
         if (!Drupal.settings.mywebform.preview) {
             fill_main_caem_fields();
+            apply_cap1_filial_autosum();
 
             jQuery('#mywebform-edit-form').once('grid-init', function () {
                 show_specific_form_version(false);
@@ -393,6 +402,96 @@
                 .myWebformSelect2SetVal(caem)
                 .trigger('change');
         }
+    }
+
+    function apply_cap1_filial_autosum() {
+        var values = (Drupal.settings && Drupal.settings.mywebform && Drupal.settings.mywebform.values) || {};
+        var filialList = values.CAPIa_CUATM_R_INDEX_FILIAL;
+
+        if (!Array.isArray(filialList) || !filialList.length) {
+            return;
+        }
+
+        var staticMappings = [
+            { target: 'CAPIa_R01_T_C2', source: 'CAPIa_R01_T_C2_FILIAL' },
+            { target: 'CAPIa_R01_T_C4', source: 'CAPIa_R01_T_C4_FILIAL' },
+            { target: 'CAPIa_R01_T_C5', source: 'CAPIa_R01_T_C5_FILIAL' },
+            { target: 'CAPIa_R01_T_C6', source: 'CAPIa_R01_T_C6_FILIAL' },
+            { target: 'CAPIa_R01_T_C7', source: 'CAPIa_R01_T_C7_FILIAL' },
+            { target: 'CAPIa_R01_T_C8', source: 'CAPIa_R01_T_C8_FILIAL' },
+            { target: 'CAPIa_R01_T_C9', source: 'CAPIa_R01_T_C9_FILIAL' },
+            { target: 'CAPIa_R01_T_C10', source: 'CAPIa_R01_T_C10_FILIAL' },
+            { target: 'CAPIa_R01_T_C11', source: 'CAPIa_R01_T_C11_FILIAL' },
+            { target: 'CAPIa_R01_F_C2', source: 'CAPIa_R01_F_C2_FILIAL' },
+            { target: 'CAPIa_R01_F_C3', source: 'CAPIa_R01_F_C3_FILIAL' },
+            { target: 'CAPIa_R01_F_C7', source: 'CAPIa_R01_F_C7_FILIAL' },
+            { target: 'CAPIa_R01_F_C8', source: 'CAPIa_R01_F_C8_FILIAL' }
+        ];
+
+        var dynamicTargetT = ['CAPIa_R_T_C2', 'CAPIa_R_T_C4', 'CAPIa_R_T_C5', 'CAPIa_R_T_C6', 'CAPIa_R_T_C7', 'CAPIa_R_T_C8', 'CAPIa_R_T_C9', 'CAPIa_R_T_C10', 'CAPIa_R_T_C11'];
+        var dynamicTargetF = ['CAPIa_R_F_C2', 'CAPIa_R_F_C3', 'CAPIa_R_F_C7', 'CAPIa_R_F_C8'];
+
+        staticMappings.forEach(function (mapping) {
+            var total = cap1_filial_sum(values[mapping.source]);
+            set_cap1_value_if_changed(mapping.target, total);
+        });
+
+        var dynamicRowCount = Array.isArray(values.CAPIa_R_INDEX) ? values.CAPIa_R_INDEX.length : 0;
+        if (!dynamicRowCount && Array.isArray(values.CAPIa_R_T_C2_FILIAL) && values.CAPIa_R_T_C2_FILIAL.length) {
+            dynamicRowCount = values.CAPIa_R_T_C2_FILIAL[0].length || 0;
+        }
+
+        for (var row = 0; row < dynamicRowCount; row++) {
+            for (var t = 0; t < dynamicTargetT.length; t++) {
+                var targetT = dynamicTargetT[t];
+                var totalT = cap1_filial_sum(values[targetT + '_FILIAL'], row);
+                set_cap1_value_if_changed(targetT, totalT, row);
+            }
+
+            for (var f = 0; f < dynamicTargetF.length; f++) {
+                var targetF = dynamicTargetF[f];
+                var totalF = cap1_filial_sum(values[targetF + '_FILIAL'], row);
+                set_cap1_value_if_changed(targetF, totalF, row);
+            }
+        }
+    }
+
+    function cap1_filial_sum(value, rowIndex) {
+        var total = 0;
+
+        if (Array.isArray(value)) {
+            for (var i = 0; i < value.length; i++) {
+                if (typeof rowIndex === 'number' && Array.isArray(value[i])) {
+                    total += toFloat(value[i][rowIndex]);
+                } else if (typeof rowIndex === 'undefined') {
+                    total += toFloat(value[i]);
+                }
+            }
+        }
+
+        return parseFloat(total.toFixed(1));
+    }
+
+    function set_cap1_value_if_changed(fieldName, value, rowIndex) {
+        var id = '#' + fieldName;
+
+        if (typeof rowIndex === 'number') {
+            id += '-' + (rowIndex + 1);
+        }
+
+        var $field = jQuery(id);
+        if (!$field.length) {
+            return;
+        }
+
+        var newValue = parseFloat(toFloat(value).toFixed(1));
+        var currentValue = toFloat($field.val());
+
+        if (newValue === currentValue) {
+            return;
+        }
+
+        $field.val(newValue).trigger('change');
     }
 
     function concatMessage(errorCode, fieldTitle, errorMessage) {
