@@ -1,0 +1,83 @@
+
+
+// Noi anterioar am mai incercat sa facem dar nu am finisat.
+// Trebuie de adaugat functionalitatea pentru (Cap. I. Numărul salariaților (fără ucenici) și timpul de lucru )
+
+// Daca se creaza o filiala a CAP1 atunci  -- Variabilile de indicate devin autosuma la analoagele lor din filiale daca nu atunci ramana cum este - in js
+
+
+// CAPIa_R01_T_C2	Rînd. 01 - T col.1	dec / DataSet / Data / CAPIa_R01 - T_C2
+// CAPIa_R01_T_C4	Rînd. 01 - T col.3	dec / DataSet / Data / CAPIa_R01 - T_C4
+// CAPIa_R01_T_C5	Rînd. 01 - T col.4	dec / DataSet / Data / CAPIa_R01 - T_C5
+// CAPIa_R01_T_C6	Rînd. 01 - T col.5	dec / DataSet / Data / CAPIa_R01 - T_C6
+// CAPIa_R01_T_C7	Rînd. 01 - T col.6	dec / DataSet / Data / CAPIa_R01 - T_C7
+// CAPIa_R01_T_C8	Rînd. 01 - T col.7	dec / DataSet / Data / CAPIa_R01 - T_C8
+// CAPIa_R01_T_C9	Rînd. 01 - T col.8	dec / DataSet / Data / CAPIa_R01 - T_C9
+// CAPIa_R01_T_C10	Rînd. 01 - T col.9	dec / DataSet / Data / CAPIa_R01 - T_C10
+// CAPIa_R01_T_C11	Rînd. 01 - T col.10	dec / DataSet / Data / CAPIa_R01 - T_C11
+// CAPIa_R01_F_C2	Rînd. 01 - F col.1	dec / DataSet / Data / CAPIa_R01 - F_C2
+// CAPIa_R01_F_C3	Rînd. 01 - F col.2	dec / DataSet / Data / CAPIa_R01 - F_C3
+// CAPIa_R01_F_C7	Rînd. 01 - F col.6	dec / DataSet / Data / CAPIa_R01 - F_C7
+// CAPIa_R01_F_C8	Rînd. 01 - F col.7	dec / DataSet / Data / CAPIa_R01 - F_C8
+
+// CAPIa_R_T_C2	Rînd.RIND - T col.1	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - T_C2
+
+// CAPIa_R_T_C4	Rînd.RIND - T col.3	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - T_C4
+// CAPIa_R_T_C5	Rînd.RIND - T col.4	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - T_C5
+// CAPIa_R_T_C6	Rînd.RIND - T col.5	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - T_C6
+// CAPIa_R_T_C7	Rînd.RIND - T col.6	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - T_C7
+// CAPIa_R_T_C8	Rînd.RIND - T col.7	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - T_C8
+// CAPIa_R_T_C9	Rînd.RIND - T col.8	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - T_C9
+// CAPIa_R_T_C10	Rînd.RIND - T col.9	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - T_C10
+// CAPIa_R_T_C11	Rînd.RIND - T col.10	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - T_C11
+// CAPIa_R_F_C2	Rînd.RIND - F col.1	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - F_C2
+// CAPIa_R_F_C3	Rînd.RIND - F col.2	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - F_C3
+// CAPIa_R_F_C7	Rînd.RIND - F col.6	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - F_C7
+// CAPIa_R_F_C8	Rînd.RIND - F col.7	dec / DataSet / Data / CAPIa / CAPIa_R[line] / CAPIa_R - F_C8
+
+
+
+
+//
+
+// CAPIa_R00_T_C2_FILIAL	Rînd. 00 - T col.1	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - T_C2_FILIAL	FILIAL_CAPIa		numeric
+
+// CAPIa_R00_T_C4_FILIAL	Rînd. 00 - T col.3	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - T_C4_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R00_T_C5_FILIAL	Rînd. 00 - T col.4	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - T_C5_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R00_T_C6_FILIAL	Rînd. 00 - T col.5	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - T_C6_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R00_T_C7_FILIAL	Rînd. 00 - T col.6	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - T_C7_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R00_T_C8_FILIAL	Rînd. 00 - T col.7	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - T_C8_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R00_T_C9_FILIAL	Rînd. 00 - T col.8	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - T_C9_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R00_T_C10_FILIAL	Rînd. 00 - T col.9	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - T_C10_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R00_T_C11_FILIAL	Rînd. 00 - T col.10	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - T_C11_FILIAL	FILIAL_CAPIa		numeric
+// CAPIa_R00_F_C2_FILIAL	Rînd. 00 - F col.1	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - F_C2_FILIAL	FILIAL_CAPIa		numeric
+// CAPIa_R00_F_C3_FILIAL	Rînd. 00 - F col.2	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - F_C3_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R00_F_C7_FILIAL	Rînd. 00 - F col.6	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - F_C7_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R00_F_C8_FILIAL	Rînd. 00 - F col.7	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R00 - F_C8_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R01_T_C1_FILIAL	Rînd. 01 - T col.CAEM	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - T_C1_FILIAL	FILIAL_CAPIa		text
+// CAPIa_R01_T_C2_FILIAL	Rînd. 01 - T col.1	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - T_C2_FILIAL	FILIAL_CAPIa		numeric
+
+// CAPIa_R01_T_C4_FILIAL	Rînd. 01 - T col.3	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - T_C4_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R01_T_C5_FILIAL	Rînd. 01 - T col.4	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - T_C5_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R01_T_C6_FILIAL	Rînd. 01 - T col.5	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - T_C6_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R01_T_C7_FILIAL	Rînd. 01 - T col.6	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - T_C7_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R01_T_C8_FILIAL	Rînd. 01 - T col.7	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - T_C8_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R01_T_C9_FILIAL	Rînd. 01 - T col.8	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - T_C9_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R01_T_C10_FILIAL	Rînd. 01 - T col.9	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - T_C10_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R01_T_C11_FILIAL	Rînd. 01 - T col.10	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - T_C11_FILIAL	FILIAL_CAPIa		numeric
+// CAPIa_R01_F_C2_FILIAL	Rînd. 01 - F col.1	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - F_C2_FILIAL	FILIAL_CAPIa		numeric
+// CAPIa_R01_F_C3_FILIAL	Rînd. 01 - F col.2	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - F_C3_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R01_F_C7_FILIAL	Rînd. 01 - F col.6	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - F_C7_FILIAL	FILIAL_CAPIa		float
+// CAPIa_R01_F_C8_FILIAL	Rînd. 01 - F col.7	dec / DataSet / Data / CAPIa / CAPIa_FILIAL_R[line] / CAPIa_R01 - F_C8_FILIAL	FILIAL_CAPIa		float
+
+
+
+// Este clar ? AI intales
+
+//Aceasta autocalculare trebuie sa fie in mod live - facuta in js
+
+//trebuie de adaugat o in M3_35.js
+
+//Dupa exemplu inov_90_180.js
+//toggle_181_182_183_logic5
+//Acest exemplu lucreaza in alt proect dar este autosuma live pentru. 
