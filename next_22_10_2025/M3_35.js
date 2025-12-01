@@ -110,6 +110,38 @@
         'CAPII_R01_T_C1_FILIAL'
     ];
 
+    var capIaFilialStaticMappings = [
+        { target: 'CAPIa_R01_T_C2', source: 'CAPIa_R01_T_C2_FILIAL' },
+        { target: 'CAPIa_R01_T_C4', source: 'CAPIa_R01_T_C4_FILIAL' },
+        { target: 'CAPIa_R01_T_C5', source: 'CAPIa_R01_T_C5_FILIAL' },
+        { target: 'CAPIa_R01_T_C6', source: 'CAPIa_R01_T_C6_FILIAL' },
+        { target: 'CAPIa_R01_T_C7', source: 'CAPIa_R01_T_C7_FILIAL' },
+        { target: 'CAPIa_R01_T_C8', source: 'CAPIa_R01_T_C8_FILIAL' },
+        { target: 'CAPIa_R01_T_C9', source: 'CAPIa_R01_T_C9_FILIAL' },
+        { target: 'CAPIa_R01_T_C10', source: 'CAPIa_R01_T_C10_FILIAL' },
+        { target: 'CAPIa_R01_T_C11', source: 'CAPIa_R01_T_C11_FILIAL' },
+        { target: 'CAPIa_R01_F_C2', source: 'CAPIa_R01_F_C2_FILIAL' },
+        { target: 'CAPIa_R01_F_C3', source: 'CAPIa_R01_F_C3_FILIAL' },
+        { target: 'CAPIa_R01_F_C7', source: 'CAPIa_R01_F_C7_FILIAL' },
+        { target: 'CAPIa_R01_F_C8', source: 'CAPIa_R01_F_C8_FILIAL' }
+    ];
+
+    var capIaFilialDynamicMappings = [
+        { target: 'CAPIa_R_T_C2', source: 'CAPIa_R_T_C2_FILIAL' },
+        { target: 'CAPIa_R_T_C4', source: 'CAPIa_R_T_C4_FILIAL' },
+        { target: 'CAPIa_R_T_C5', source: 'CAPIa_R_T_C5_FILIAL' },
+        { target: 'CAPIa_R_T_C6', source: 'CAPIa_R_T_C6_FILIAL' },
+        { target: 'CAPIa_R_T_C7', source: 'CAPIa_R_T_C7_FILIAL' },
+        { target: 'CAPIa_R_T_C8', source: 'CAPIa_R_T_C8_FILIAL' },
+        { target: 'CAPIa_R_T_C9', source: 'CAPIa_R_T_C9_FILIAL' },
+        { target: 'CAPIa_R_T_C10', source: 'CAPIa_R_T_C10_FILIAL' },
+        { target: 'CAPIa_R_T_C11', source: 'CAPIa_R_T_C11_FILIAL' },
+        { target: 'CAPIa_R_F_C2', source: 'CAPIa_R_F_C2_FILIAL' },
+        { target: 'CAPIa_R_F_C3', source: 'CAPIa_R_F_C3_FILIAL' },
+        { target: 'CAPIa_R_F_C7', source: 'CAPIa_R_F_C7_FILIAL' },
+        { target: 'CAPIa_R_F_C8', source: 'CAPIa_R_F_C8_FILIAL' }
+    ];
+
     Drupal.behaviors.munca3 = {
         attach: function (context) {
             jQuery('#mywebform-edit-form').on('change', '.dynamic-cuatm', function () {
@@ -206,6 +238,14 @@
                 jQuery('.FILIAL_CAPII-row.row-' + rowIndex + ' .FILIAL_CAPII-grid-delrow').trigger('click');
             });
 
+            jQuery('#FILIAL_CAPIa').on('row_added row_deleted', function () {
+                applyCapIaFilialAutoSum();
+            });
+
+            jQuery('#FILIAL_CAPIa').on('mywebform:sync', 'input, select', function () {
+                applyCapIaFilialAutoSum();
+            });
+
             jQuery('#FILIAL_CAPIa').on('row_added', '.FILIAL_CAPIa-CAPIa-wrapper', function (event) {
                 event.stopPropagation();
 
@@ -244,6 +284,7 @@
     webform.afterLoad.munca3 = function () {
         if (!Drupal.settings.mywebform.preview) {
             fill_main_caem_fields();
+            applyCapIaFilialAutoSum();
 
             jQuery('#mywebform-edit-form').once('grid-init', function () {
                 show_specific_form_version(false);
@@ -392,6 +433,80 @@
             jQuery('.CAPII_FILIAL-' + parentIndex + '-row.row-' + rowIndex + ' select.dynamic-section2-caem')
                 .myWebformSelect2SetVal(caem)
                 .trigger('change');
+        }
+    }
+
+    function hasCapIaFilials() {
+        var filials = Drupal.settings.mywebform.values.CAPIa_CUATM_R_INDEX_FILIAL;
+        return Array.isArray(filials) && filials.length > 0;
+    }
+
+    function sumCapIaFilialStatic(fieldName) {
+        var data = Drupal.settings.mywebform.values[fieldName] || [];
+        var total = 0;
+
+        if (Array.isArray(data)) {
+            for (var i = 0; i < data.length; i++) {
+                total += toFloat(data[i]);
+            }
+        }
+
+        return total;
+    }
+
+    function sumCapIaFilialDynamic(fieldName, rowIndex) {
+        var data = Drupal.settings.mywebform.values[fieldName] || [];
+        var total = 0;
+
+        for (var i = 0; i < data.length; i++) {
+            var rowData = data[i];
+            if (Array.isArray(rowData) && typeof rowData[rowIndex] !== 'undefined') {
+                total += toFloat(rowData[rowIndex]);
+            }
+        }
+
+        return total;
+    }
+
+    function setCapIaAutoValue(fieldName, value, index) {
+        var selector = '#' + fieldName;
+
+        if (typeof index === 'number') {
+            selector += '-' + (index + 1);
+        }
+
+        var $field = jQuery(selector);
+        if (!$field.length) {
+            return;
+        }
+
+        var normalizedValue = toFloat(value);
+        if (isNaN(normalizedValue)) {
+            normalizedValue = '';
+        }
+
+        $field.val(normalizedValue).trigger('change');
+    }
+
+    function applyCapIaFilialAutoSum() {
+        if (!hasCapIaFilials()) {
+            return;
+        }
+
+        for (var i = 0; i < capIaFilialStaticMappings.length; i++) {
+            var staticMapping = capIaFilialStaticMappings[i];
+            var staticSum = sumCapIaFilialStatic(staticMapping.source);
+            setCapIaAutoValue(staticMapping.target, staticSum);
+        }
+
+        for (var k = 0; k < capIaFilialDynamicMappings.length; k++) {
+            var dynamicMapping = capIaFilialDynamicMappings[k];
+            var targetValues = Drupal.settings.mywebform.values[dynamicMapping.target] || [];
+
+            for (var rowIndex = 0; rowIndex < targetValues.length; rowIndex++) {
+                var dynamicSum = sumCapIaFilialDynamic(dynamicMapping.source, rowIndex);
+                setCapIaAutoValue(dynamicMapping.target, dynamicSum, rowIndex);
+            }
         }
     }
 
