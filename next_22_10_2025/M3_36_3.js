@@ -2572,6 +2572,9 @@
         return result;
     }
 
+
+
+
     function validate_rule_03085(param, index, parentIndex) {
         if (field_exists(param.t1, index, parentIndex) && field_exists(param.t2, index, parentIndex)) {
             // citim raw pentru a decide dacă rândul e gol
@@ -3578,4 +3581,6 @@
 
 
 })(jQuery);
+
+
 ;
